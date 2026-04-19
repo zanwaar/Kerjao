@@ -12,6 +12,12 @@
     <form method="GET" class="px-5 py-4 border-b border-gray-100 flex gap-3 flex-wrap">
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari task..."
             class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-48">
+        <select name="program_kerja_id" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="">Semua Program</option>
+            @foreach($programs as $program)
+            <option value="{{ $program->id }}" @selected((string) request('program_kerja_id') === (string) $program->id)>{{ $program->nama_program }}</option>
+            @endforeach
+        </select>
         <select name="status" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <option value="">Semua Status</option>
             @foreach($statuses as $s)
@@ -25,7 +31,7 @@
             @endforeach
         </select>
         <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm px-4 py-1.5 rounded-lg">Filter</button>
-        @if(request()->hasAny(['search', 'status', 'prioritas', 'kegiatan_id']))
+        @if(request()->hasAny(['search', 'program_kerja_id', 'status', 'prioritas', 'kegiatan_id']))
         <a href="{{ route('task.index') }}" class="text-sm text-gray-500 self-center">Reset</a>
         @endif
     </form>
@@ -69,19 +75,19 @@
                 </td>
                 <td class="px-5 py-3">
                     <div class="flex items-center gap-2 justify-end">
-                        @can('task.edit')
+                        @if(auth()->user()->can('task.edit') && $task->canBeUpdatedBy(auth()->user()))
                         <a href="{{ route('task.edit', $task) }}" class="text-gray-400 hover:text-indigo-600">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                         </a>
-                        @endcan
-                        @can('task.delete')
+                        @endif
+                        @if(auth()->user()->can('task.delete') && $task->canBeManagedBy(auth()->user()))
                         <form method="POST" action="{{ route('task.destroy', $task) }}" onsubmit="return confirm('Hapus task ini?')">
                             @csrf @method('DELETE')
                             <button type="submit" class="text-gray-400 hover:text-red-600">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </button>
                         </form>
-                        @endcan
+                        @endif
                     </div>
                 </td>
             </tr>

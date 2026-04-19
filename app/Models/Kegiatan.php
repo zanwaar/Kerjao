@@ -50,6 +50,21 @@ class Kegiatan extends Model
         return $this->hasMany(TodoList::class);
     }
 
+    public function isOwnedBy(User $user): bool
+    {
+        return $this->created_by === $user->id;
+    }
+
+    public function canBeManagedBy(User $user): bool
+    {
+        return $user->can('task.view-all') || $this->isOwnedBy($user);
+    }
+
+    public function scopeOwnedBy(Builder $query, User $user): Builder
+    {
+        return $query->where('created_by', $user->id);
+    }
+
     public function scopeVisibleTo(Builder $query, User $user): Builder
     {
         if ($user->can('task.view-all')) {
@@ -59,9 +74,12 @@ class Kegiatan extends Model
         $pegawai = $user->pegawai;
 
         if (! $pegawai) {
-            return $query->whereRaw('1 = 0');
+            return $query->ownedBy($user);
         }
 
-        return $query->whereHas('tasks', fn (Builder $taskQuery) => $taskQuery->assignedTo($pegawai->id));
+        return $query->where(function (Builder $kegiatanQuery) use ($pegawai, $user): void {
+            $kegiatanQuery->ownedBy($user)
+                ->orWhereHas('tasks', fn (Builder $taskQuery) => $taskQuery->assignedTo($pegawai->id));
+        });
     }
 }

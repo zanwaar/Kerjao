@@ -92,6 +92,31 @@ class TodoList extends Model
         return $query->where('assigned_to', $pegawaiId);
     }
 
+    public function isOwnedBy(User $user): bool
+    {
+        return $this->created_by === $user->id;
+    }
+
+    public function canBeManagedBy(User $user): bool
+    {
+        return $user->can('task.view-all') || $this->isOwnedBy($user);
+    }
+
+    public function isAssignedTo(User $user): bool
+    {
+        return $this->assigned_to === $user->pegawai?->id;
+    }
+
+    public function canBeUpdatedBy(User $user): bool
+    {
+        return $this->canBeManagedBy($user) || $this->isAssignedTo($user);
+    }
+
+    public function scopeOwnedBy(Builder $query, User $user): Builder
+    {
+        return $query->where('created_by', $user->id);
+    }
+
     public function scopeVisibleTo(Builder $query, User $user): Builder
     {
         if ($user->can('task.view-all')) {
@@ -101,9 +126,12 @@ class TodoList extends Model
         $pegawai = $user->pegawai;
 
         if (! $pegawai) {
-            return $query->whereRaw('1 = 0');
+            return $query->ownedBy($user);
         }
 
-        return $query->assignedTo($pegawai->id);
+        return $query->where(function (Builder $taskQuery) use ($pegawai, $user): void {
+            $taskQuery->ownedBy($user)
+                ->orWhere(fn (Builder $assignedTaskQuery) => $assignedTaskQuery->assignedTo($pegawai->id));
+        });
     }
 }

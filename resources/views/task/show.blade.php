@@ -9,9 +9,9 @@
     <h2 class="text-lg font-semibold text-gray-800 truncate">{{ $task->nama_task }}</h2>
     <x-badge-status :status="$task->prioritas->value">{{ $task->prioritas->label() }}</x-badge-status>
     <x-badge-status :status="$task->status->value">{{ $task->status->label() }}</x-badge-status>
-    @can('task.edit')
+    @if(auth()->user()->can('task.edit') && $task->canBeUpdatedBy(auth()->user()))
     <a href="{{ route('task.edit', $task) }}" class="ml-auto shrink-0 text-sm text-indigo-600 hover:underline">Edit</a>
-    @endcan
+    @endif
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -3,14 +3,15 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = [
             // pegawai
@@ -57,9 +58,9 @@ class RolePermissionSeeder extends Seeder
 
         $pegawai = Role::firstOrCreate(['name' => 'pegawai']);
         $pegawai->syncPermissions([
-            'program-kerja.view',
-            'kegiatan.view',
-            'task.view',
+            'program-kerja.view', 'program-kerja.create',
+            'kegiatan.view', 'kegiatan.create',
+            'task.view', 'task.create', 'task.edit',
             'daily-scrum.view', 'daily-scrum.create', 'daily-scrum.edit',
             'bukti-aktivitas.view', 'bukti-aktivitas.create', 'bukti-aktivitas.edit', 'bukti-aktivitas.delete',
             'github-activity.view', 'github-activity.create', 'github-activity.edit',

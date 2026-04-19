@@ -8,9 +8,9 @@
     </a>
     <h2 class="text-lg font-semibold text-gray-800">{{ $kegiatan->nama_kegiatan }}</h2>
     <x-badge-status :status="$kegiatan->status_kegiatan->value">{{ $kegiatan->status_kegiatan->label() }}</x-badge-status>
-    @can('kegiatan.edit')
+    @if(auth()->user()->can('kegiatan.edit') && $kegiatan->canBeManagedBy(auth()->user()))
     <a href="{{ route('kegiatan.edit', $kegiatan) }}" class="ml-auto text-sm text-indigo-600 hover:underline">Edit</a>
-    @endcan
+    @endif
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -29,9 +29,9 @@
     <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200">
         <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
             <h3 class="font-medium text-gray-700">Task ({{ $kegiatan->tasks->count() }})</h3>
-            @can('task.create')
+            @if(auth()->user()->can('task.create') && $kegiatan->canBeManagedBy(auth()->user()))
             <a href="{{ route('task.create', ['kegiatan_id' => $kegiatan->id]) }}" class="text-xs bg-indigo-600 text-white px-3 py-1 rounded-lg hover:bg-indigo-700">+ Tambah Task</a>
-            @endcan
+            @endif
         </div>
         <div class="divide-y divide-gray-50">
             @forelse($kegiatan->tasks as $task)

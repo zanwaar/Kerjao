@@ -71,9 +71,10 @@ class ProgramKerjaController extends Controller
         return view('program-kerja.show', compact('programKerja'));
     }
 
-    public function edit(ProgramKerja $programKerja): View
+    public function edit(Request $request, ProgramKerja $programKerja): View
     {
         $this->authorizePermission('program-kerja.edit');
+        abort_unless($programKerja->canBeManagedBy($request->user()), 403);
 
         $statuses = StatusProgram::cases();
 
@@ -82,14 +83,17 @@ class ProgramKerjaController extends Controller
 
     public function update(StoreProgramKerjaRequest $request, ProgramKerja $programKerja): RedirectResponse
     {
+        abort_unless($programKerja->canBeManagedBy($request->user()), 403);
+
         $programKerja->update($request->validated());
 
         return redirect()->route('program-kerja.index')->with('success', 'Program kerja berhasil diperbarui.');
     }
 
-    public function destroy(ProgramKerja $programKerja): RedirectResponse
+    public function destroy(Request $request, ProgramKerja $programKerja): RedirectResponse
     {
         $this->authorizePermission('program-kerja.delete');
+        abort_unless($programKerja->canBeManagedBy($request->user()), 403);
 
         $programKerja->delete();
 

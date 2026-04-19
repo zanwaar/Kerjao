@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\StatusProgram;
+use App\Models\ProgramKerja;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -10,9 +11,15 @@ class StoreProgramKerjaRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $permission = $this->routeIs('program-kerja.update') ? 'program-kerja.edit' : 'program-kerja.create';
+        if ($this->routeIs('program-kerja.update')) {
+            $programKerja = $this->route('program_kerja');
 
-        return $this->user()->can($permission);
+            return $this->user()->can('program-kerja.edit')
+                && $programKerja instanceof ProgramKerja
+                && $programKerja->canBeManagedBy($this->user());
+        }
+
+        return $this->user()->can('program-kerja.create');
     }
 
     public function rules(): array

@@ -6,6 +6,11 @@
 <div class="max-w-2xl bg-white rounded-xl border border-gray-200 p-6">
     <form method="POST" action="{{ route('task.store') }}" class="space-y-4">
         @csrf
+        @if($kegiatan->isEmpty())
+        <div class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            Belum ada kegiatan yang bisa dipakai. Buat kegiatan Anda sendiri terlebih dahulu.
+        </div>
+        @endif
         <x-form-field label="Kegiatan" name="kegiatan_id" :required="true">
             <select name="kegiatan_id" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('kegiatan_id') border-red-400 @enderror">
                 <option value="">-- Pilih Kegiatan --</option>
@@ -21,6 +26,9 @@
                 <option value="{{ $p->id }}" @selected(old('assigned_to') == $p->id)>{{ $p->nama_pegawai }} — {{ $p->jabatan }}</option>
                 @endforeach
             </select>
+            @if($pegawai->count() === 1)
+            <p class="mt-1 text-xs text-gray-500">Pegawai hanya bisa membuat task untuk dirinya sendiri.</p>
+            @endif
         </x-form-field>
         <x-form-field label="Nama Task" name="nama_task" :required="true">
             <input type="text" name="nama_task" value="{{ old('nama_task') }}"
@@ -55,7 +63,7 @@
                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
         </x-form-field>
         <div class="flex gap-3 pt-2">
-            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2 rounded-lg">Simpan</button>
+            <button type="submit" @disabled($kegiatan->isEmpty() || $pegawai->isEmpty()) class="bg-indigo-600 hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-300 text-white text-sm font-medium px-5 py-2 rounded-lg">Simpan</button>
             <a href="{{ route('task.index') }}" class="text-sm text-gray-600 px-5 py-2 rounded-lg border border-gray-300">Batal</a>
         </div>
     </form>

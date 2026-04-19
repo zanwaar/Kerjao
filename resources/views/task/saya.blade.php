@@ -2,7 +2,11 @@
 @section('title', 'Task Saya')
 @section('content')
 
+@can('task.create')
+<x-page-header title="Task Saya" action-label="Tambah Task" action-route="{{ route('task.create') }}" />
+@else
 <x-page-header title="Task Saya" />
+@endcan
 
 @if(!$pegawai)
 <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg p-4 text-sm">
@@ -11,7 +15,13 @@
 @else
 
 <div class="bg-white rounded-xl border border-gray-200">
-    <form method="GET" class="px-5 py-4 border-b border-gray-100 flex gap-3">
+    <form method="GET" class="px-5 py-4 border-b border-gray-100 flex gap-3 flex-wrap">
+        <select name="program_kerja_id" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="">Semua Program</option>
+            @foreach($programs as $program)
+            <option value="{{ $program->id }}" @selected((string) request('program_kerja_id') === (string) $program->id)>{{ $program->nama_program }}</option>
+            @endforeach
+        </select>
         <select name="status" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <option value="">Semua Status</option>
             @foreach($statuses as $s)
@@ -19,6 +29,9 @@
             @endforeach
         </select>
         <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm px-4 py-1.5 rounded-lg">Filter</button>
+        @if(request()->hasAny(['program_kerja_id', 'status']))
+        <a href="{{ route('task.saya') }}" class="text-sm text-gray-500 self-center">Reset</a>
+        @endif
     </form>
 
     <div class="divide-y divide-gray-50">
@@ -30,6 +43,9 @@
                         <a href="{{ route('task.show', $task) }}" class="font-medium text-gray-800 hover:text-indigo-600">{{ $task->nama_task }}</a>
                         <x-badge-status :status="$task->prioritas->value">{{ $task->prioritas->label() }}</x-badge-status>
                         <x-badge-status :status="$task->status->value">{{ $task->status->label() }}</x-badge-status>
+                        @if(auth()->user()->can('task.edit') && $task->canBeUpdatedBy(auth()->user()))
+                        <a href="{{ route('task.edit', $task) }}" class="text-xs font-medium text-indigo-600 hover:underline">Edit Progress</a>
+                        @endif
                     </div>
                     <p class="text-xs text-gray-400 mt-1">{{ $task->kegiatan->programKerja->nama_program }} · {{ $task->kegiatan->nama_kegiatan }}</p>
                     @if($task->due_date)

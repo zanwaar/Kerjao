@@ -38,7 +38,12 @@ class KegiatanController extends Controller
     {
         $this->authorizePermission('kegiatan.create');
 
-        $programs = ProgramKerja::orderBy('nama_program')->get();
+        $user = $request->user();
+
+        $programs = ProgramKerja::query()
+            ->when(! $user->can('task.view-all'), fn ($query) => $query->ownedBy($user))
+            ->orderBy('nama_program')
+            ->get();
         $statuses = StatusKegiatan::cases();
         $selectedProgram = $request->program_kerja_id;
 
@@ -75,11 +80,15 @@ class KegiatanController extends Controller
         return view('kegiatan.show', compact('kegiatan'));
     }
 
-    public function edit(Kegiatan $kegiatan): View
+    public function edit(Request $request, Kegiatan $kegiatan): View
     {
         $this->authorizePermission('kegiatan.edit');
+        abort_unless($kegiatan->canBeManagedBy($request->user()), 403);
 
-        $programs = ProgramKerja::orderBy('nama_program')->get();
+        $programs = ProgramKerja::query()
+            ->when(! $request->user()->can('task.view-all'), fn ($query) => $query->ownedBy($request->user()))
+            ->orderBy('nama_program')
+            ->get();
         $statuses = StatusKegiatan::cases();
 
         return view('kegiatan.edit', compact('kegiatan', 'programs', 'statuses'));
@@ -87,14 +96,17 @@ class KegiatanController extends Controller
 
     public function update(StoreKegiatanRequest $request, Kegiatan $kegiatan): RedirectResponse
     {
+        abort_unless($kegiatan->canBeManagedBy($request->user()), 403);
+
         $kegiatan->update($request->validated());
 
         return redirect()->route('kegiatan.index')->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
-    public function destroy(Kegiatan $kegiatan): RedirectResponse
+    public function destroy(Request $request, Kegiatan $kegiatan): RedirectResponse
     {
         $this->authorizePermission('kegiatan.delete');
+        abort_unless($kegiatan->canBeManagedBy($request->user()), 403);
 
         $kegiatan->delete();
 
