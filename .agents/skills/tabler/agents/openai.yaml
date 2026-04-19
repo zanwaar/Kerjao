@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tabler"
+  short_description: "Build Laravel Blade UIs with Tabler"
+  default_prompt: "Use  to build or refactor this Blade UI with consistent Tabler components."

@@ -4,66 +4,70 @@
 
 @can('program-kerja.create')
 <x-page-header title="Program Kerja" action-label="Tambah Program" action-route="{{ route('program-kerja.create') }}" />
-@else
-<x-page-header title="Program Kerja" />
 @endcan
 
-<div class="bg-white rounded-xl border border-gray-200">
-    <form method="GET" class="px-5 py-4 border-b border-gray-100 flex gap-3 flex-wrap">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama program..."
-            class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-56">
-        <select name="status" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="">Semua Status</option>
-            @foreach($statuses as $s)
-            <option value="{{ $s->value }}" @selected(request('status') === $s->value)>{{ $s->label() }}</option>
-            @endforeach
-        </select>
-        <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm px-4 py-1.5 rounded-lg">Filter</button>
-        @if(request()->hasAny(['search', 'status']))
-        <a href="{{ route('program-kerja.index') }}" class="text-sm text-gray-500 self-center">Reset</a>
-        @endif
-    </form>
-
-    <div class="divide-y divide-gray-50">
-        @forelse($programs as $program)
-        <div class="px-5 py-4 hover:bg-gray-50 flex items-start justify-between gap-4">
-            <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-2 flex-wrap">
-                    <a href="{{ route('program-kerja.show', $program) }}" class="font-medium text-gray-800 hover:text-indigo-600">{{ $program->nama_program }}</a>
-                    <x-badge-status :status="$program->status_program->value">{{ $program->status_program->label() }}</x-badge-status>
-                </div>
-                <p class="text-xs text-gray-400 mt-1">
-                    {{ $program->waktu_mulai->format('d M Y') }} — {{ $program->waktu_selesai->format('d M Y') }}
-                    · {{ $program->kegiatan_count }} kegiatan
-                    · Oleh {{ $program->creator->name }}
-                </p>
-                @if($program->deskripsi)
-                <p class="text-sm text-gray-500 mt-1 line-clamp-1">{{ $program->deskripsi }}</p>
-                @endif
-            </div>
-            @if(auth()->user()->can('program-kerja.edit') && $program->canBeManagedBy(auth()->user()))
-            <div class="flex items-center gap-2 shrink-0">
-                <a href="{{ route('program-kerja.edit', $program) }}" class="text-gray-400 hover:text-indigo-600">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                </a>
-                @if(auth()->user()->can('program-kerja.delete'))
-                <form method="POST" action="{{ route('program-kerja.destroy', $program) }}" onsubmit="return confirm('Hapus program ini? Semua kegiatan terkait akan ikut terhapus.')">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="text-gray-400 hover:text-red-600">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    </button>
-                </form>
-                @endif
-            </div>
+<div class="card">
+    <div class="card-header">
+        <form method="GET" class="d-flex gap-2 flex-wrap w-100">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama program..."
+                class="form-control form-control-sm w-auto">
+            <select name="status" class="form-select form-select-sm w-auto">
+                <option value="">Semua Status</option>
+                @foreach($statuses as $s)
+                <option value="{{ $s->value }}" @selected(request('status') === $s->value)>{{ $s->label() }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="btn btn-sm btn-outline-secondary">Filter</button>
+            @if(request()->hasAny(['search', 'status']))
+            <a href="{{ route('program-kerja.index') }}" class="btn btn-sm btn-ghost-secondary">Reset</a>
             @endif
+        </form>
+    </div>
+
+    <div class="list-group list-group-flush">
+        @forelse($programs as $program)
+        <div class="list-group-item">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <a href="{{ route('program-kerja.show', $program) }}" class="text-body fw-medium">{{ $program->nama_program }}</a>
+                        <x-badge-status :status="$program->status_program->value">{{ $program->status_program->label() }}</x-badge-status>
+                    </div>
+                    <div class="text-secondary small mt-1">
+                        {{ $program->waktu_mulai->format('d M Y') }} — {{ $program->waktu_selesai->format('d M Y') }}
+                        · {{ $program->kegiatan_count }} kegiatan
+                        · Oleh {{ $program->creator->name }}
+                    </div>
+                    @if($program->deskripsi)
+                    <div class="text-secondary small mt-1 text-truncate">{{ $program->deskripsi }}</div>
+                    @endif
+                </div>
+                @if(auth()->user()->can('program-kerja.edit') && $program->canBeManagedBy(auth()->user()))
+                <div class="col-auto d-flex gap-1">
+                    <a href="{{ route('program-kerja.edit', $program) }}" class="btn btn-sm btn-icon btn-ghost-secondary" title="Edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-2"><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/><path d="M16 5l3 3"/></svg>
+                    </a>
+                    @if(auth()->user()->can('program-kerja.delete'))
+                    <form method="POST" action="{{ route('program-kerja.destroy', $program) }}" onsubmit="return confirm('Hapus program ini? Semua kegiatan terkait akan ikut terhapus.')">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-icon btn-ghost-danger" title="Hapus">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-2"><path d="M4 7l16 0"/><path d="M10 11l0 6"/><path d="M14 11l0 6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/></svg>
+                        </button>
+                    </form>
+                    @endif
+                </div>
+                @endif
+            </div>
         </div>
         @empty
-        <div class="px-5 py-10 text-center text-gray-400">Belum ada program kerja</div>
+        <div class="list-group-item text-center text-secondary py-5">Belum ada program kerja</div>
         @endforelse
     </div>
 
     @if($programs->hasPages())
-    <div class="px-5 py-4 border-t border-gray-100">{{ $programs->links() }}</div>
+    <div class="card-footer d-flex align-items-center">
+        {{ $programs->links() }}
+    </div>
     @endif
 </div>
 @endsection

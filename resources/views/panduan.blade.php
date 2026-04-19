@@ -1,267 +1,310 @@
 @extends('layouts.app')
+
 @section('title', 'Panduan Penggunaan')
+
 @section('content')
 <x-page-header title="Panduan Penggunaan" />
 
-<div class="max-w-4xl space-y-5">
-
-    {{-- Alur Kerja --}}
-    <div class="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 class="text-base font-semibold text-gray-800 mb-4">Alur Kerja Sistem Kerjao</h2>
-        <div class="flex items-center gap-2 flex-wrap">
-            @foreach([
-                ['label' => 'Program Kerja', 'color' => 'bg-indigo-100 text-indigo-700'],
-                ['label' => 'Kegiatan', 'color' => 'bg-purple-100 text-purple-700'],
-                ['label' => 'Task', 'color' => 'bg-blue-100 text-blue-700'],
-                ['label' => 'Daily Scrum', 'color' => 'bg-green-100 text-green-700'],
-                ['label' => 'Bukti Aktivitas', 'color' => 'bg-yellow-100 text-yellow-700'],
-                ['label' => 'Laporan PDF', 'color' => 'bg-red-100 text-red-700'],
-            ] as $i => $step)
-            @if($i > 0)
-            <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            @endif
-            <span class="px-3 py-1.5 rounded-lg text-sm font-medium {{ $step['color'] }}">{{ $step['label'] }}</span>
-            @endforeach
-        </div>
-        <p class="text-sm text-gray-500 mt-3">Semua aktivitas berakar dari <strong>Program Kerja</strong>. Pastikan program dan kegiatan sudah dibuat sebelum menambahkan task.</p>
-    </div>
-
-    {{-- Program Kerja --}}
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-indigo-50">
-            <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-sm font-bold shrink-0">1</div>
-            <div>
-                <h2 class="font-semibold text-gray-800">Program Kerja</h2>
-                <p class="text-xs text-gray-500">Wadah utama untuk mengelompokkan seluruh kegiatan kerja dalam satu periode</p>
-            </div>
-        </div>
-        <div class="p-6 space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Cara Mengisi</h3>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li class="flex gap-2"><span class="text-indigo-500 font-bold shrink-0">·</span><span><strong>Nama Program</strong> — Nama resmi program kerja, contoh: "Pengembangan SIMAK 2026"</span></li>
-                        <li class="flex gap-2"><span class="text-indigo-500 font-bold shrink-0">·</span><span><strong>Deskripsi</strong> — Penjelasan singkat tujuan dan lingkup program</span></li>
-                        <li class="flex gap-2"><span class="text-indigo-500 font-bold shrink-0">·</span><span><strong>Waktu Mulai & Selesai</strong> — Rentang waktu pelaksanaan program</span></li>
-                        <li class="flex gap-2"><span class="text-indigo-500 font-bold shrink-0">·</span><span><strong>Status</strong> — Pilih sesuai kondisi: Perencanaan → Aktif → Selesai</span></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Status Program</h3>
-                    <div class="space-y-1.5">
-                        <div class="flex items-center gap-2 text-sm"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium">Perencanaan</span><span class="text-gray-500">Program sedang dirancang, belum dimulai</span></div>
-                        <div class="flex items-center gap-2 text-sm"><span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">Aktif</span><span class="text-gray-500">Program sedang berjalan</span></div>
-                        <div class="flex items-center gap-2 text-sm"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">Selesai</span><span class="text-gray-500">Program telah selesai dilaksanakan</span></div>
-                        <div class="flex items-center gap-2 text-sm"><span class="px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">Ditunda</span><span class="text-gray-500">Program dihentikan sementara</span></div>
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-10">
+        <div class="row row-cards">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title mb-3">Alur Kerja Sistem Kerjao</h3>
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            @foreach([
+                                ['label' => 'Program Kerja', 'class' => 'bg-primary-lt text-primary'],
+                                ['label' => 'Kegiatan', 'class' => 'bg-purple-lt text-purple'],
+                                ['label' => 'Task', 'class' => 'bg-azure-lt text-azure'],
+                                ['label' => 'Daily Scrum', 'class' => 'bg-success-lt text-success'],
+                                ['label' => 'Bukti Aktivitas', 'class' => 'bg-warning-lt text-warning'],
+                                ['label' => 'Laporan PDF', 'class' => 'bg-danger-lt text-danger'],
+                            ] as $i => $step)
+                            @if($i > 0)
+                            <span class="text-secondary">/</span>
+                            @endif
+                            <span class="badge {{ $step['class'] }}">{{ $step['label'] }}</span>
+                            @endforeach
+                        </div>
+                        <p class="text-secondary mt-3 mb-0">
+                            Semua aktivitas berakar dari <strong>Program Kerja</strong>. Pastikan program dan kegiatan sudah dibuat sebelum menambahkan task.
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="rounded-lg bg-indigo-50 border border-indigo-100 px-4 py-3 text-sm text-indigo-700">
-                <strong>Catatan:</strong> Hanya Admin dan Pimpinan yang dapat membuat program kerja. Pegawai hanya dapat melihat.
-            </div>
-        </div>
-    </div>
 
-    {{-- Kegiatan --}}
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-purple-50">
-            <div class="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center text-white text-sm font-bold shrink-0">2</div>
-            <div>
-                <h2 class="font-semibold text-gray-800">Kegiatan</h2>
-                <p class="text-xs text-gray-500">Sub-bagian dari Program Kerja yang merepresentasikan setiap aktivitas besar</p>
-            </div>
-        </div>
-        <div class="p-6 space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Cara Mengisi</h3>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li class="flex gap-2"><span class="text-purple-500 font-bold shrink-0">·</span><span><strong>Program Kerja</strong> — Pilih program kerja yang menaungi kegiatan ini</span></li>
-                        <li class="flex gap-2"><span class="text-purple-500 font-bold shrink-0">·</span><span><strong>Nama Kegiatan</strong> — Nama spesifik kegiatan, contoh: "Analisis Kebutuhan Sistem"</span></li>
-                        <li class="flex gap-2"><span class="text-purple-500 font-bold shrink-0">·</span><span><strong>Target Capaian</strong> — Output yang diharapkan dari kegiatan ini</span></li>
-                        <li class="flex gap-2"><span class="text-purple-500 font-bold shrink-0">·</span><span><strong>Waktu Mulai & Selesai</strong> — Rentang waktu kegiatan (dalam periode program)</span></li>
-                        <li class="flex gap-2"><span class="text-purple-500 font-bold shrink-0">·</span><span><strong>Status</strong> — Update status sesuai perkembangan kegiatan</span></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Hubungan</h3>
-                    <div class="rounded-lg bg-gray-50 border border-gray-100 p-3 text-sm text-gray-600 space-y-1">
-                        <p>1 Program Kerja dapat memiliki <strong>banyak Kegiatan</strong></p>
-                        <p>1 Kegiatan dapat memiliki <strong>banyak Task</strong></p>
-                        <p class="text-gray-400 text-xs mt-2">Contoh: Program "SIMAK 2026" → Kegiatan "Pengembangan Backend" → Task "Buat API Pegawai"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Task --}}
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-blue-50">
-            <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-sm font-bold shrink-0">3</div>
-            <div>
-                <h2 class="font-semibold text-gray-800">Task</h2>
-                <p class="text-xs text-gray-500">Pekerjaan spesifik yang dibebankan kepada pegawai, dengan progres yang dapat dilacak</p>
-            </div>
-        </div>
-        <div class="p-6 space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Cara Mengisi</h3>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li class="flex gap-2"><span class="text-blue-500 font-bold shrink-0">·</span><span><strong>Kegiatan</strong> — Pilih kegiatan yang menaungi task ini</span></li>
-                        <li class="flex gap-2"><span class="text-blue-500 font-bold shrink-0">·</span><span><strong>Nama Task</strong> — Deskripsi singkat pekerjaan, gunakan kata kerja: "Buat...", "Implementasi...", "Review..."</span></li>
-                        <li class="flex gap-2"><span class="text-blue-500 font-bold shrink-0">·</span><span><strong>Ditugaskan ke</strong> — Pilih pegawai penanggung jawab task</span></li>
-                        <li class="flex gap-2"><span class="text-blue-500 font-bold shrink-0">·</span><span><strong>Prioritas</strong> — Tentukan urgensi: Rendah / Sedang / Tinggi</span></li>
-                        <li class="flex gap-2"><span class="text-blue-500 font-bold shrink-0">·</span><span><strong>Tenggat Waktu</strong> — Batas penyelesaian task</span></li>
-                        <li class="flex gap-2"><span class="text-blue-500 font-bold shrink-0">·</span><span><strong>Progres (%)</strong> — Update persentase penyelesaian secara berkala (0–100)</span></li>
-                        <li class="flex gap-2"><span class="text-blue-500 font-bold shrink-0">·</span><span><strong>Status</strong> — Ubah status sesuai kondisi terkini</span></li>
-                    </ul>
-                </div>
-                <div class="space-y-3">
-                    <div>
-                        <h3 class="text-sm font-semibold text-gray-700 mb-2">Status Task</h3>
-                        <div class="space-y-1.5">
-                            <div class="flex items-center gap-2 text-sm"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium">Belum Dimulai</span><span class="text-gray-500">Task baru dibuat, belum dikerjakan</span></div>
-                            <div class="flex items-center gap-2 text-sm"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">Sedang Berjalan</span><span class="text-gray-500">Task sedang dikerjakan</span></div>
-                            <div class="flex items-center gap-2 text-sm"><span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">Selesai</span><span class="text-gray-500">Task telah selesai 100%</span></div>
-                            <div class="flex items-center gap-2 text-sm"><span class="px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-medium">Dibatalkan</span><span class="text-gray-500">Task tidak dilanjutkan</span></div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary-lt">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-primary text-white">1</span>
+                            <div>
+                                <h3 class="card-title mb-1">Program Kerja</h3>
+                                <div class="text-secondary small">Wadah utama untuk mengelompokkan seluruh kegiatan kerja dalam satu periode</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="rounded-lg bg-blue-50 border border-blue-100 px-4 py-3 text-sm text-blue-700">
-                        <strong>Tips:</strong> Gunakan menu <em>Task Saya</em> di sidebar untuk melihat hanya task yang ditugaskan kepada Anda.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Daily Scrum --}}
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-green-50">
-            <div class="w-8 h-8 rounded-lg bg-green-600 flex items-center justify-center text-white text-sm font-bold shrink-0">4</div>
-            <div>
-                <h2 class="font-semibold text-gray-800">Daily Scrum</h2>
-                <p class="text-xs text-gray-500">Catatan harian aktivitas kerja pegawai, diisi <strong>setiap hari kerja</strong> untuk setiap task yang dikerjakan</p>
-            </div>
-        </div>
-        <div class="p-6 space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Cara Mengisi</h3>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li class="flex gap-2"><span class="text-green-500 font-bold shrink-0">·</span><span><strong>Tanggal</strong> — Tanggal hari ini (hari kerja)</span></li>
-                        <li class="flex gap-2"><span class="text-green-500 font-bold shrink-0">·</span><span><strong>Task</strong> — Task yang dikerjakan pada hari ini</span></li>
-                        <li class="flex gap-2"><span class="text-green-500 font-bold shrink-0">·</span><span><strong>Rencana Kerja Harian</strong> — Apa yang akan/sudah Anda kerjakan hari ini</span></li>
-                        <li class="flex gap-2"><span class="text-green-500 font-bold shrink-0">·</span><span><strong>Indikator Capaian</strong> — Target atau output spesifik yang diharapkan selesai</span></li>
-                        <li class="flex gap-2"><span class="text-green-500 font-bold shrink-0">·</span><span><strong>Potensi Risiko</strong> — Hambatan yang mungkin ditemui (opsional)</span></li>
-                        <li class="flex gap-2"><span class="text-green-500 font-bold shrink-0">·</span><span><strong>Realisasi</strong> — Apa yang benar-benar berhasil diselesaikan (isi saat akhir hari)</span></li>
-                        <li class="flex gap-2"><span class="text-green-500 font-bold shrink-0">·</span><span><strong>Rencana Tindak Lanjut</strong> — Kelanjutan yang akan dikerjakan besok</span></li>
-                    </ul>
-                </div>
-                <div class="space-y-3">
-                    <div class="rounded-lg bg-green-50 border border-green-100 p-4">
-                        <h3 class="text-sm font-semibold text-green-800 mb-2">Contoh Pengisian</h3>
-                        <div class="space-y-2 text-xs text-green-700">
-                            <div><span class="font-semibold">Rencana Kerja:</span> Melanjutkan implementasi API endpoint CRUD pegawai dan penambahan validasi input</div>
-                            <div><span class="font-semibold">Indikator Capaian:</span> Endpoint GET /api/pegawai dan POST /api/pegawai selesai dan tertes</div>
-                            <div><span class="font-semibold">Potensi Risiko:</span> Ketergantungan pada struktur tabel yang mungkin berubah</div>
-                            <div><span class="font-semibold">Realisasi:</span> Berhasil menyelesaikan endpoint GET dan POST, endpoint PUT masih dalam proses</div>
-                            <div><span class="font-semibold">Tindak Lanjut:</span> Lanjutkan endpoint PUT dan DELETE esok hari</div>
+                    <div class="card-body">
+                        <div class="row row-cards">
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Cara Mengisi</h4>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><strong>Nama Program</strong> - Nama resmi program kerja, contoh: "Pengembangan SIMAK 2026"</li>
+                                    <li class="mb-2"><strong>Deskripsi</strong> - Penjelasan singkat tujuan dan lingkup program</li>
+                                    <li class="mb-2"><strong>Waktu Mulai &amp; Selesai</strong> - Rentang waktu pelaksanaan program</li>
+                                    <li class="mb-0"><strong>Status</strong> - Pilih sesuai kondisi: Perencanaan, Aktif, Selesai, atau Ditunda</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Status Program</h4>
+                                <div class="d-flex flex-column gap-2">
+                                    <div><span class="badge bg-secondary-lt text-secondary">Perencanaan</span> <span class="text-secondary small">Program sedang dirancang, belum dimulai</span></div>
+                                    <div><span class="badge bg-success-lt text-success">Aktif</span> <span class="text-secondary small">Program sedang berjalan</span></div>
+                                    <div><span class="badge bg-azure-lt text-azure">Selesai</span> <span class="text-secondary small">Program telah selesai dilaksanakan</span></div>
+                                    <div><span class="badge bg-warning-lt text-warning">Ditunda</span> <span class="text-secondary small">Program dihentikan sementara</span></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="alert alert-primary mb-0" role="alert">
+                                    Hanya Admin dan Pimpinan yang dapat membuat program kerja. Pegawai hanya dapat melihat.
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="rounded-lg bg-yellow-50 border border-yellow-100 px-4 py-3 text-sm text-yellow-700">
-                        <strong>Penting:</strong> Isi Daily Scrum <em>setiap hari kerja</em> untuk memastikan capaian Anda tercatat di Laporan Bulanan.
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-purple-lt">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-purple text-white">2</span>
+                            <div>
+                                <h3 class="card-title mb-1">Kegiatan</h3>
+                                <div class="text-secondary small">Sub-bagian dari Program Kerja yang merepresentasikan setiap aktivitas besar</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cards">
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Cara Mengisi</h4>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><strong>Program Kerja</strong> - Pilih program kerja yang menaungi kegiatan ini</li>
+                                    <li class="mb-2"><strong>Nama Kegiatan</strong> - Nama spesifik kegiatan, contoh: "Analisis Kebutuhan Sistem"</li>
+                                    <li class="mb-2"><strong>Target Capaian</strong> - Output yang diharapkan dari kegiatan ini</li>
+                                    <li class="mb-2"><strong>Waktu Mulai &amp; Selesai</strong> - Rentang waktu kegiatan dalam periode program</li>
+                                    <li class="mb-0"><strong>Status</strong> - Update status sesuai perkembangan kegiatan</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Hubungan</h4>
+                                <div class="card card-sm bg-body-secondary border-0">
+                                    <div class="card-body">
+                                        <p class="mb-2">1 Program Kerja dapat memiliki <strong>banyak Kegiatan</strong>.</p>
+                                        <p class="mb-2">1 Kegiatan dapat memiliki <strong>banyak Task</strong>.</p>
+                                        <p class="text-secondary small mb-0">Contoh: Program "SIMAK 2026" -> Kegiatan "Pengembangan Backend" -> Task "Buat API Pegawai"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-azure-lt">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-azure text-white">3</span>
+                            <div>
+                                <h3 class="card-title mb-1">Task</h3>
+                                <div class="text-secondary small">Pekerjaan spesifik yang dibebankan kepada pegawai, dengan progres yang dapat dilacak</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cards">
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Cara Mengisi</h4>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><strong>Kegiatan</strong> - Pilih kegiatan yang menaungi task ini</li>
+                                    <li class="mb-2"><strong>Nama Task</strong> - Gunakan deskripsi singkat dengan kata kerja yang jelas</li>
+                                    <li class="mb-2"><strong>Ditugaskan ke</strong> - Pilih pegawai penanggung jawab task</li>
+                                    <li class="mb-2"><strong>Prioritas</strong> - Tentukan urgensi: Rendah, Sedang, atau Tinggi</li>
+                                    <li class="mb-2"><strong>Tenggat Waktu</strong> - Batas penyelesaian task</li>
+                                    <li class="mb-2"><strong>Progres (%)</strong> - Update persentase penyelesaian berkala</li>
+                                    <li class="mb-0"><strong>Status</strong> - Ubah status sesuai kondisi terkini</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Status Task</h4>
+                                <div class="d-flex flex-column gap-2">
+                                    <div><span class="badge bg-secondary-lt text-secondary">Belum Dimulai</span> <span class="text-secondary small">Task baru dibuat, belum dikerjakan</span></div>
+                                    <div><span class="badge bg-azure-lt text-azure">Sedang Berjalan</span> <span class="text-secondary small">Task sedang dikerjakan</span></div>
+                                    <div><span class="badge bg-success-lt text-success">Selesai</span> <span class="text-secondary small">Task telah selesai 100%</span></div>
+                                    <div><span class="badge bg-danger-lt text-danger">Dibatalkan</span> <span class="text-secondary small">Task tidak dilanjutkan</span></div>
+                                </div>
+                                <div class="alert alert-azure mt-3 mb-0" role="alert">
+                                    Gunakan menu <em>Task Saya</em> di sidebar untuk melihat hanya task yang ditugaskan kepada Anda.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-success-lt">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-success text-white">4</span>
+                            <div>
+                                <h3 class="card-title mb-1">Daily Scrum</h3>
+                                <div class="text-secondary small">Catatan harian aktivitas kerja pegawai yang diisi setiap hari kerja untuk tiap task yang dikerjakan</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cards">
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Cara Mengisi</h4>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><strong>Tanggal</strong> - Tanggal hari kerja saat scrum diisi</li>
+                                    <li class="mb-2"><strong>Task</strong> - Task yang dikerjakan hari ini</li>
+                                    <li class="mb-2"><strong>Rencana Kerja Harian</strong> - Apa yang akan atau sudah dikerjakan</li>
+                                    <li class="mb-2"><strong>Indikator Capaian</strong> - Target atau output spesifik yang diharapkan selesai</li>
+                                    <li class="mb-2"><strong>Potensi Risiko</strong> - Hambatan yang mungkin ditemui</li>
+                                    <li class="mb-2"><strong>Realisasi</strong> - Apa yang benar-benar berhasil diselesaikan</li>
+                                    <li class="mb-0"><strong>Rencana Tindak Lanjut</strong> - Kelanjutan pekerjaan esok hari</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card card-sm border-success">
+                                    <div class="card-body">
+                                        <h4 class="mb-3 text-success">Contoh Pengisian</h4>
+                                        <div class="small d-flex flex-column gap-2">
+                                            <div><strong>Rencana Kerja:</strong> Melanjutkan implementasi API endpoint CRUD pegawai dan penambahan validasi input.</div>
+                                            <div><strong>Indikator Capaian:</strong> Endpoint GET /api/pegawai dan POST /api/pegawai selesai dan teruji.</div>
+                                            <div><strong>Potensi Risiko:</strong> Ketergantungan pada struktur tabel yang mungkin berubah.</div>
+                                            <div><strong>Realisasi:</strong> Endpoint GET dan POST selesai, endpoint PUT masih dalam proses.</div>
+                                            <div><strong>Tindak Lanjut:</strong> Lanjutkan endpoint PUT dan DELETE esok hari.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-warning mt-3 mb-0" role="alert">
+                                    Isi Daily Scrum <em>setiap hari kerja</em> agar capaian Anda tercatat di Laporan Bulanan.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-warning-lt">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-warning text-white">5</span>
+                            <div>
+                                <h3 class="card-title mb-1">Bukti Aktivitas, GitHub &amp; WakaTime</h3>
+                                <div class="text-secondary small">Dokumentasi pendukung sebagai bukti pekerjaan yang telah dilakukan</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cards">
+                            <div class="col-md-4">
+                                <div class="card card-sm h-100">
+                                    <div class="card-body">
+                                        <h4 class="mb-2">Bukti Aktivitas</h4>
+                                        <p class="text-secondary small">Lampirkan bukti pendukung pekerjaan.</p>
+                                        <ul class="list-unstyled small mb-0">
+                                            <li class="mb-1"><strong>Link</strong> - URL halaman atau dokumen online</li>
+                                            <li class="mb-1"><strong>Dokumen</strong> - File PDF, Word, atau Excel</li>
+                                            <li class="mb-1"><strong>Foto</strong> - Screenshot atau foto kegiatan</li>
+                                            <li class="mb-1"><strong>Catatan</strong> - Ringkasan teks</li>
+                                            <li class="mb-0"><strong>Lainnya</strong> - Jenis bukti lain</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card card-sm h-100">
+                                    <div class="card-body">
+                                        <h4 class="mb-2">GitHub Activity</h4>
+                                        <p class="text-secondary small">Catat aktivitas commit ke repository.</p>
+                                        <ul class="list-unstyled small mb-0">
+                                            <li class="mb-1"><strong>Repository</strong> - Nama repo dengan format owner/repo</li>
+                                            <li class="mb-1"><strong>Branch</strong> - Nama branch yang digunakan</li>
+                                            <li class="mb-1"><strong>Commit Hash</strong> - Hash SHA commit 7 sampai 40 karakter</li>
+                                            <li class="mb-1"><strong>Commit Time</strong> - Waktu commit dilakukan</li>
+                                            <li class="mb-1"><strong>PR/Issue Link</strong> - URL Pull Request atau Issue</li>
+                                            <li class="mb-0"><strong>Commit Message</strong> - Pesan commit</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card card-sm h-100">
+                                    <div class="card-body">
+                                        <h4 class="mb-2">WakaTime Activity</h4>
+                                        <p class="text-secondary small">Catat durasi coding dari WakaTime.</p>
+                                        <ul class="list-unstyled small mb-0">
+                                            <li class="mb-1"><strong>Tanggal</strong> - Tanggal aktivitas coding</li>
+                                            <li class="mb-1"><strong>Project Name</strong> - Nama project di WakaTime</li>
+                                            <li class="mb-1"><strong>Language</strong> - Bahasa pemrograman utama</li>
+                                            <li class="mb-0"><strong>Durasi (jam)</strong> - Total jam coding, misalnya 2.5 berarti 2 jam 30 menit</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-danger-lt">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-danger text-white">6</span>
+                            <div>
+                                <h3 class="card-title mb-1">Laporan Bulanan</h3>
+                                <div class="text-secondary small">Rekap otomatis seluruh aktivitas dalam satu bulan yang dapat diekspor ke PDF</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cards">
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Cara Menggunakan</h4>
+                                <ol class="mb-0">
+                                    <li class="mb-2">Pilih <strong>Bulan</strong> dan <strong>Tahun</strong> yang ingin dilihat.</li>
+                                    <li class="mb-2">Filter berdasarkan <strong>Pegawai</strong> tertentu bila perlu.</li>
+                                    <li class="mb-2">Filter berdasarkan <strong>Program Kerja</strong> tertentu bila perlu.</li>
+                                    <li class="mb-2">Klik <strong>Filter</strong> untuk menampilkan data.</li>
+                                    <li class="mb-0">Klik <strong>Export PDF</strong> untuk mengunduh laporan.</li>
+                                </ol>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Isi Laporan</h4>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2">Rekap semua task beserta status dan progres.</li>
+                                    <li class="mb-2">Total jam WakaTime per task.</li>
+                                    <li class="mb-2">Rekap daily scrum seluruh periode.</li>
+                                    <li class="mb-0">Ringkasan statistik seperti total task, task selesai, dan jam coding.</li>
+                                </ul>
+                                <div class="alert alert-danger mt-3 mb-0" role="alert">
+                                    Fitur Export PDF hanya tersedia untuk Admin dan Pimpinan.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    {{-- Bukti Aktivitas --}}
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-yellow-50">
-            <div class="w-8 h-8 rounded-lg bg-yellow-500 flex items-center justify-center text-white text-sm font-bold shrink-0">5</div>
-            <div>
-                <h2 class="font-semibold text-gray-800">Bukti Aktivitas, GitHub & WakaTime</h2>
-                <p class="text-xs text-gray-500">Dokumentasi pendukung sebagai bukti pekerjaan yang telah dilakukan</p>
-            </div>
-        </div>
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="rounded-lg border border-gray-100 bg-gray-50 p-4">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Bukti Aktivitas</h3>
-                    <p class="text-xs text-gray-500 mb-2">Lampirkan bukti pendukung pekerjaan</p>
-                    <ul class="space-y-1 text-xs text-gray-600">
-                        <li><strong>Link</strong> — URL halaman, dokumen online</li>
-                        <li><strong>Dokumen</strong> — File PDF, Word, Excel</li>
-                        <li><strong>Foto</strong> — Screenshot, foto kegiatan</li>
-                        <li><strong>Catatan</strong> — Ringkasan teks</li>
-                        <li><strong>Lainnya</strong> — Jenis bukti lain</li>
-                    </ul>
-                </div>
-                <div class="rounded-lg border border-gray-100 bg-gray-50 p-4">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">GitHub Activity</h3>
-                    <p class="text-xs text-gray-500 mb-2">Catat aktivitas commit ke repository</p>
-                    <ul class="space-y-1 text-xs text-gray-600">
-                        <li><strong>Repository</strong> — Nama repo (format: owner/repo)</li>
-                        <li><strong>Branch</strong> — Nama branch yang digunakan</li>
-                        <li><strong>Commit Hash</strong> — Hash SHA commit (7–40 karakter)</li>
-                        <li><strong>Commit Time</strong> — Waktu commit dilakukan</li>
-                        <li><strong>PR/Issue Link</strong> — URL Pull Request atau Issue</li>
-                        <li><strong>Commit Message</strong> — Pesan commit</li>
-                    </ul>
-                </div>
-                <div class="rounded-lg border border-gray-100 bg-gray-50 p-4">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">WakaTime Activity</h3>
-                    <p class="text-xs text-gray-500 mb-2">Catat durasi coding dari WakaTime</p>
-                    <ul class="space-y-1 text-xs text-gray-600">
-                        <li><strong>Tanggal</strong> — Tanggal aktivitas coding</li>
-                        <li><strong>Project Name</strong> — Nama project di WakaTime</li>
-                        <li><strong>Language</strong> — Bahasa pemrograman utama</li>
-                        <li><strong>Durasi (jam)</strong> — Total jam coding (misal: 2.5 = 2 jam 30 menit)</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Laporan --}}
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-red-50">
-            <div class="w-8 h-8 rounded-lg bg-red-500 flex items-center justify-center text-white text-sm font-bold shrink-0">6</div>
-            <div>
-                <h2 class="font-semibold text-gray-800">Laporan Bulanan</h2>
-                <p class="text-xs text-gray-500">Rekap otomatis seluruh aktivitas dalam satu bulan, dapat diekspor ke PDF</p>
-            </div>
-        </div>
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Cara Menggunakan</h3>
-                    <ol class="space-y-2 text-sm text-gray-600 list-decimal list-inside">
-                        <li>Pilih <strong>Bulan</strong> dan <strong>Tahun</strong> yang ingin dilihat</li>
-                        <li>Filter berdasarkan <strong>Pegawai</strong> tertentu (opsional)</li>
-                        <li>Filter berdasarkan <strong>Program Kerja</strong> tertentu (opsional)</li>
-                        <li>Klik <strong>Filter</strong> untuk menampilkan data</li>
-                        <li>Klik <strong>Export PDF</strong> untuk mengunduh laporan</li>
-                    </ol>
-                </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-gray-700 mb-2">Isi Laporan</h3>
-                    <ul class="space-y-1 text-sm text-gray-600">
-                        <li class="flex gap-2"><span class="text-red-400">·</span> Rekap semua task beserta status dan progres</li>
-                        <li class="flex gap-2"><span class="text-red-400">·</span> Total jam WakaTime per task</li>
-                        <li class="flex gap-2"><span class="text-red-400">·</span> Rekap daily scrum seluruh periode</li>
-                        <li class="flex gap-2"><span class="text-red-400">·</span> Ringkasan statistik (total task, selesai, jam coding)</li>
-                    </ul>
-                    <div class="rounded-lg bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-700 mt-3">
-                        <strong>Catatan:</strong> Fitur Export PDF hanya tersedia untuk Admin dan Pimpinan.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 @endsection

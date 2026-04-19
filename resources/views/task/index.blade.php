@@ -1,103 +1,104 @@
 @extends('layouts.app')
-@section('title', 'Task')
+@section('title', 'Semua Task')
 @section('content')
 
 @can('task.create')
 <x-page-header title="Semua Task" action-label="Tambah Task" action-route="{{ route('task.create') }}" />
-@else
-<x-page-header title="Semua Task" />
 @endcan
 
-<div class="bg-white rounded-xl border border-gray-200">
-    <form method="GET" class="px-5 py-4 border-b border-gray-100 flex gap-3 flex-wrap">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari task..."
-            class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-48">
-        <select name="program_kerja_id" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="">Semua Program</option>
-            @foreach($programs as $program)
-            <option value="{{ $program->id }}" @selected((string) request('program_kerja_id') === (string) $program->id)>{{ $program->nama_program }}</option>
-            @endforeach
-        </select>
-        <select name="status" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="">Semua Status</option>
-            @foreach($statuses as $s)
-            <option value="{{ $s->value }}" @selected(request('status') === $s->value)>{{ $s->label() }}</option>
-            @endforeach
-        </select>
-        <select name="prioritas" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="">Semua Prioritas</option>
-            @foreach($priorities as $p)
-            <option value="{{ $p->value }}" @selected(request('prioritas') === $p->value)>{{ $p->label() }}</option>
-            @endforeach
-        </select>
-        <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm px-4 py-1.5 rounded-lg">Filter</button>
-        @if(request()->hasAny(['search', 'program_kerja_id', 'status', 'prioritas', 'kegiatan_id']))
-        <a href="{{ route('task.index') }}" class="text-sm text-gray-500 self-center">Reset</a>
-        @endif
-    </form>
+<div class="card">
+    <div class="card-header">
+        <form method="GET" class="d-flex gap-2 flex-wrap w-100">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari task..."
+                class="form-control form-control-sm w-auto">
+            <select name="program_kerja_id" class="form-select form-select-sm w-auto">
+                <option value="">Semua Program</option>
+                @foreach($programs as $program)
+                <option value="{{ $program->id }}" @selected((string) request('program_kerja_id') === (string) $program->id)>{{ $program->nama_program }}</option>
+                @endforeach
+            </select>
+            <select name="status" class="form-select form-select-sm w-auto">
+                <option value="">Semua Status</option>
+                @foreach($statuses as $s)
+                <option value="{{ $s->value }}" @selected(request('status') === $s->value)>{{ $s->label() }}</option>
+                @endforeach
+            </select>
+            <select name="prioritas" class="form-select form-select-sm w-auto">
+                <option value="">Semua Prioritas</option>
+                @foreach($priorities as $p)
+                <option value="{{ $p->value }}" @selected(request('prioritas') === $p->value)>{{ $p->label() }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="btn btn-sm btn-outline-secondary">Filter</button>
+            @if(request()->hasAny(['search', 'program_kerja_id', 'status', 'prioritas', 'kegiatan_id']))
+            <a href="{{ route('task.index') }}" class="btn btn-sm btn-ghost-secondary">Reset</a>
+            @endif
+        </form>
+    </div>
 
-    <table class="w-full text-sm">
-        <thead class="bg-gray-50 border-b border-gray-100">
-            <tr>
-                <th class="text-left px-5 py-3 font-medium text-gray-600">Task</th>
-                <th class="text-left px-5 py-3 font-medium text-gray-600">Pelaksana</th>
-                <th class="text-left px-5 py-3 font-medium text-gray-600">Due Date</th>
-                <th class="text-left px-5 py-3 font-medium text-gray-600">Progress</th>
-                <th class="text-left px-5 py-3 font-medium text-gray-600">Prioritas</th>
-                <th class="text-left px-5 py-3 font-medium text-gray-600">Status</th>
-                <th class="px-5 py-3"></th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-50">
-            @forelse($tasks as $task)
-            <tr class="hover:bg-gray-50">
-                <td class="px-5 py-3">
-                    <a href="{{ route('task.show', $task) }}" class="font-medium text-gray-800 hover:text-indigo-600">{{ $task->nama_task }}</a>
-                    <p class="text-xs text-gray-400 mt-0.5">{{ $task->kegiatan->programKerja->nama_program }} · {{ $task->kegiatan->nama_kegiatan }}</p>
-                </td>
-                <td class="px-5 py-3 text-gray-600">{{ $task->assignee->nama_pegawai }}</td>
-                <td class="px-5 py-3 text-xs {{ $task->due_date && $task->due_date->isPast() && $task->status->value !== 'done' ? 'text-red-600 font-medium' : 'text-gray-500' }}">
-                    {{ $task->due_date?->format('d M Y') ?? '-' }}
-                </td>
-                <td class="px-5 py-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-indigo-500 rounded-full" style="width: {{ $task->progress_persen }}%"></div>
+    <div class="table-responsive">
+        <table class="table table-vcenter card-table">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Pelaksana</th>
+                    <th>Due Date</th>
+                    <th>Progress</th>
+                    <th>Prioritas</th>
+                    <th>Status</th>
+                    <th class="w-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($tasks as $task)
+                <tr>
+                    <td>
+                        <a href="{{ route('task.show', $task) }}" class="fw-medium text-body">{{ $task->nama_task }}</a>
+                        <div class="text-secondary small mt-1">{{ $task->kegiatan->programKerja->nama_program }} · {{ $task->kegiatan->nama_kegiatan }}</div>
+                    </td>
+                    <td>{{ $task->assignee->nama_pegawai }}</td>
+                    <td class="{{ $task->due_date && $task->due_date->isPast() && $task->status->value !== 'done' ? 'text-danger fw-medium' : 'text-secondary' }} small">
+                        {{ $task->due_date?->format('d M Y') ?? '-' }}
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="progress progress-sm flex-grow-1" style="min-width: 4rem">
+                                <div class="progress-bar bg-primary" style="width: {{ $task->progress_persen }}%"></div>
+                            </div>
+                            <span class="text-secondary small">{{ $task->progress_persen }}%</span>
                         </div>
-                        <span class="text-xs text-gray-500">{{ $task->progress_persen }}%</span>
-                    </div>
-                </td>
-                <td class="px-5 py-3">
-                    <x-badge-status :status="$task->prioritas->value">{{ $task->prioritas->label() }}</x-badge-status>
-                </td>
-                <td class="px-5 py-3">
-                    <x-badge-status :status="$task->status->value">{{ $task->status->label() }}</x-badge-status>
-                </td>
-                <td class="px-5 py-3">
-                    <div class="flex items-center gap-2 justify-end">
-                        @if(auth()->user()->can('task.edit') && $task->canBeUpdatedBy(auth()->user()))
-                        <a href="{{ route('task.edit', $task) }}" class="text-gray-400 hover:text-indigo-600">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                        </a>
-                        @endif
-                        @if(auth()->user()->can('task.delete') && $task->canBeManagedBy(auth()->user()))
-                        <form method="POST" action="{{ route('task.destroy', $task) }}" onsubmit="return confirm('Hapus task ini?')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="text-gray-400 hover:text-red-600">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                            </button>
-                        </form>
-                        @endif
-                    </div>
-                </td>
-            </tr>
-            @empty
-            <tr><td colspan="7" class="px-5 py-10 text-center text-gray-400">Tidak ada task</td></tr>
-            @endforelse
-        </tbody>
-    </table>
+                    </td>
+                    <td><x-badge-status :status="$task->prioritas->value">{{ $task->prioritas->label() }}</x-badge-status></td>
+                    <td><x-badge-status :status="$task->status->value">{{ $task->status->label() }}</x-badge-status></td>
+                    <td>
+                        <div class="d-flex gap-1 justify-content-end">
+                            @if(auth()->user()->can('task.edit') && $task->canBeUpdatedBy(auth()->user()))
+                            <a href="{{ route('task.edit', $task) }}" class="btn btn-sm btn-icon btn-ghost-secondary" title="Edit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-2"><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/><path d="M16 5l3 3"/></svg>
+                            </a>
+                            @endif
+                            @if(auth()->user()->can('task.delete') && $task->canBeManagedBy(auth()->user()))
+                            <form method="POST" action="{{ route('task.destroy', $task) }}" onsubmit="return confirm('Hapus task ini?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-icon btn-ghost-danger" title="Hapus">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-2"><path d="M4 7l16 0"/><path d="M10 11l0 6"/><path d="M14 11l0 6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/></svg>
+                                </button>
+                            </form>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr><td colspan="7" class="text-center text-secondary py-5">Tidak ada task</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
     @if($tasks->hasPages())
-    <div class="px-5 py-4 border-t border-gray-100">{{ $tasks->links() }}</div>
+    <div class="card-footer d-flex align-items-center">
+        {{ $tasks->links() }}
+    </div>
     @endif
 </div>
 @endsection

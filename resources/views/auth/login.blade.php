@@ -1,52 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.4.0
+* @link https://tabler.io
+* Copyright 2018-2026 The Tabler Authors
+* Copyright 2018-2026 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>Login — Kerjao</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css" rel="stylesheet"/>
+    <style>@import url('https://rsms.me/inter/inter.css');</style>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+<body class="d-flex flex-column">
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler-theme.min.js"></script>
 
-<div class="w-full max-w-sm">
-    <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-indigo-600">Kerjao</h1>
-        <p class="text-gray-500 mt-1 text-sm">Work Program Management</p>
+    <div class="page page-center">
+        <div class="container container-tight py-4">
+            <div class="text-center mb-4">
+                <span class="navbar-brand navbar-brand-autodark">
+                    <span class="fw-bold fs-2 text-primary">Kerjao</span>
+                </span>
+            </div>
+
+            <div class="card card-md">
+                <div class="card-body">
+                    <h2 class="h2 text-center mb-4">Masuk ke akun Anda</h2>
+
+                    <form method="POST" action="{{ route('login') }}" autocomplete="off">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus
+                                class="form-control @error('email') is-invalid @enderror"
+                                placeholder="nama@email.com">
+                            @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group input-group-flat">
+                                <input type="password" id="password" name="password" required
+                                    class="form-control" placeholder="Password">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-check">
+                                <input type="checkbox" name="remember" class="form-check-input"/>
+                                <span class="form-check-label">Ingat saya</span>
+                            </label>
+                        </div>
+
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary w-100">Masuk</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center text-secondary mt-3">
+                <small>Work Program Management System</small>
+            </div>
+        </div>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-        <h2 class="text-lg font-semibold text-gray-800 mb-6">Masuk ke akun Anda</h2>
-
-        <form method="POST" action="{{ route('login') }}" class="space-y-4">
-            @csrf
-
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus
-                    class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 {{ $errors->has('email') ? 'border-red-400' : 'border-gray-300' }}">
-                @error('email')
-                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                <input type="password" id="password" name="password" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-
-            <div class="flex items-center gap-2">
-                <input type="checkbox" id="remember" name="remember" class="rounded border-gray-300">
-                <label for="remember" class="text-sm text-gray-600">Ingat saya</label>
-            </div>
-
-            <button type="submit"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors">
-                Masuk
-            </button>
-        </form>
-    </div>
-</div>
-
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js" defer></script>
 </body>
 </html>

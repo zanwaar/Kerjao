@@ -2,140 +2,186 @@
 @section('title', $pegawai->nama_pegawai)
 @section('content')
 
-<div class="flex items-center gap-3 mb-6">
-    <a href="{{ route('pegawai.index') }}" class="text-gray-400 hover:text-gray-600">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-    </a>
-    <h2 class="text-lg font-semibold text-gray-800">{{ $pegawai->nama_pegawai }}</h2>
-    <x-badge-status :status="$pegawai->status_pegawai->value">{{ $pegawai->status_pegawai->label() }}</x-badge-status>
-    @can('pegawai.edit')
-    <a href="{{ route('pegawai.edit', $pegawai) }}" class="ml-auto text-sm text-indigo-600 hover:underline">Edit</a>
-    @endcan
-</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <a href="{{ route('pegawai.index') }}" class="btn btn-sm btn-ghost-secondary me-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-2"><path d="M15 6l-6 6l6 6"/></svg>
+                </a>
+                <h3 class="card-title">Informasi Pegawai</h3>
+                @can('pegawai.edit')
+                <div class="card-options">
+                    <a href="{{ route('pegawai.edit', $pegawai) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                </div>
+                @endcan
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="avatar avatar-lg bg-primary-lt">{{ strtoupper(substr($pegawai->nama_pegawai, 0, 1)) }}</span>
+                    <div>
+                        <div class="fw-semibold">{{ $pegawai->nama_pegawai }}</div>
+                        <x-badge-status :status="$pegawai->status_pegawai->value">{{ $pegawai->status_pegawai->label() }}</x-badge-status>
+                    </div>
+                </div>
+                <dl class="row">
+                    <dt class="col-5 text-secondary small">NIP</dt>
+                    <dd class="col-7 fw-medium">{{ $pegawai->nip ?? '-' }}</dd>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
-        <h3 class="font-medium text-gray-700 text-sm">Informasi Pegawai</h3>
-        <dl class="space-y-2 text-sm">
-            <div><dt class="text-gray-400">NIP</dt><dd class="text-gray-800 font-medium">{{ $pegawai->nip ?? '-' }}</dd></div>
-            <div><dt class="text-gray-400">Jabatan</dt><dd class="text-gray-800">{{ $pegawai->jabatan }}</dd></div>
-            <div><dt class="text-gray-400">Unit Kerja</dt><dd class="text-gray-800">{{ $pegawai->unit_kerja }}</dd></div>
-            @if($pegawai->user)
-            <div><dt class="text-gray-400">Email</dt><dd class="text-gray-800">{{ $pegawai->user->email }}</dd></div>
-            @endif
-            @if($pegawai->github_username)
-            <div><dt class="text-gray-400">GitHub</dt><dd class="text-indigo-600">@{{ $pegawai->github_username }}</dd></div>
-            @endif
-        </dl>
-    </div>
+                    <dt class="col-5 text-secondary small">Jabatan</dt>
+                    <dd class="col-7">{{ $pegawai->jabatan }}</dd>
 
-    <div class="lg:col-span-2 space-y-6">
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Program</p>
-                <p class="text-2xl font-bold text-indigo-600 mt-1">{{ $summary['program_count'] }}</p>
-            </div>
-            <div class="bg-white rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Total Task</p>
-                <p class="text-2xl font-bold text-blue-600 mt-1">{{ $summary['task_count'] }}</p>
-            </div>
-            <div class="bg-white rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Task Selesai</p>
-                <p class="text-2xl font-bold text-green-600 mt-1">{{ $summary['task_done_count'] }}</p>
-            </div>
-            <div class="bg-white rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Daily Scrum</p>
-                <p class="text-2xl font-bold text-amber-600 mt-1">{{ $summary['daily_scrum_count'] }}</p>
+                    <dt class="col-5 text-secondary small">Unit Kerja</dt>
+                    <dd class="col-7">{{ $pegawai->unit_kerja }}</dd>
+
+                    @if($pegawai->user)
+                    <dt class="col-5 text-secondary small">Email</dt>
+                    <dd class="col-7">{{ $pegawai->user->email }}</dd>
+                    @endif
+
+                    @if($pegawai->github_username)
+                    <dt class="col-5 text-secondary small">GitHub</dt>
+                    <dd class="col-7 text-primary">@{{ $pegawai->github_username }}</dd>
+                    @endif
+                </dl>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl border border-gray-200">
-            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-                <h3 class="font-medium text-gray-700">Program yang Dikerjakan</h3>
-                <span class="text-xs text-gray-400">{{ $programs->count() }} program</span>
+        <div class="row row-cards mb-3">
+            <div class="col-6">
+                <div class="card card-sm">
+                    <div class="card-body">
+                        <div class="subheader">Program</div>
+                        <div class="h1 mb-0 text-primary">{{ $summary['program_count'] }}</div>
+                    </div>
+                </div>
             </div>
-            <div class="divide-y divide-gray-50">
+            <div class="col-6">
+                <div class="card card-sm">
+                    <div class="card-body">
+                        <div class="subheader">Total Task</div>
+                        <div class="h1 mb-0 text-azure">{{ $summary['task_count'] }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card card-sm">
+                    <div class="card-body">
+                        <div class="subheader">Selesai</div>
+                        <div class="h1 mb-0 text-success">{{ $summary['task_done_count'] }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card card-sm">
+                    <div class="card-body">
+                        <div class="subheader">Daily Scrum</div>
+                        <div class="h1 mb-0 text-warning">{{ $summary['daily_scrum_count'] }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title">Program yang Dikerjakan</h3>
+                <div class="card-options">
+                    <span class="text-secondary small">{{ $programs->count() }} program</span>
+                </div>
+            </div>
+            <div class="list-group list-group-flush">
                 @forelse($programs as $program)
-                <div class="px-5 py-4">
-                    <div class="flex items-center justify-between gap-3">
-                        <a href="{{ route('program-kerja.show', $program) }}" class="text-sm font-medium text-gray-800 hover:text-indigo-600">{{ $program->nama_program }}</a>
+                <div class="list-group-item">
+                    <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                        <a href="{{ route('program-kerja.show', $program) }}" class="fw-medium text-body">{{ $program->nama_program }}</a>
                         <x-badge-status :status="$program->status_program->value">{{ $program->status_program->label() }}</x-badge-status>
                     </div>
-                    <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="row g-2">
                         @foreach($program->kegiatan as $kegiatan)
-                        <div class="rounded-lg border border-gray-100 bg-gray-50 p-3">
-                            <p class="text-sm font-medium text-gray-800">{{ $kegiatan->nama_kegiatan }}</p>
-                            <p class="text-xs text-gray-400 mt-1">{{ $kegiatan->task_done_count }}/{{ $kegiatan->tasks_count }} task selesai</p>
+                        <div class="col-md-6">
+                            <div class="card card-sm bg-light border-0">
+                                <div class="card-body py-2">
+                                    <div class="fw-medium small">{{ $kegiatan->nama_kegiatan }}</div>
+                                    <div class="text-secondary small">{{ $kegiatan->task_done_count }}/{{ $kegiatan->tasks_count }} task selesai</div>
+                                </div>
+                            </div>
                         </div>
                         @endforeach
                     </div>
                 </div>
                 @empty
-                <div class="px-5 py-8 text-center text-sm text-gray-400">Pegawai ini belum punya program yang terkait task.</div>
+                <div class="list-group-item text-center text-secondary py-4">Pegawai ini belum punya program yang terkait task.</div>
                 @endforelse
             </div>
         </div>
 
-        <div class="bg-white rounded-xl border border-gray-200">
-            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-                <h3 class="font-medium text-gray-700">Task Pegawai</h3>
-                <span class="text-xs text-gray-400">{{ $tasks->count() }} task</span>
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title">Task Pegawai</h3>
+                <div class="card-options">
+                    <span class="text-secondary small">{{ $tasks->count() }} task</span>
+                </div>
             </div>
-            <div class="divide-y divide-gray-50">
+            <div class="list-group list-group-flush">
                 @forelse($tasks as $task)
-                <div class="px-5 py-4">
-                    <div class="flex items-start justify-between gap-3">
+                <div class="list-group-item">
+                    <div class="d-flex align-items-start justify-content-between gap-2">
                         <div>
-                            <a href="{{ route('task.show', $task) }}" class="text-sm font-medium text-gray-800 hover:text-indigo-600">{{ $task->nama_task }}</a>
-                            <p class="text-xs text-gray-400">{{ $task->kegiatan->programKerja->nama_program }} · {{ $task->kegiatan->nama_kegiatan }}</p>
+                            <a href="{{ route('task.show', $task) }}" class="fw-medium text-body">{{ $task->nama_task }}</a>
+                            <div class="text-secondary small">{{ $task->kegiatan->programKerja->nama_program }} · {{ $task->kegiatan->nama_kegiatan }}</div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs text-gray-500">{{ $task->progress_persen }}%</span>
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                            <span class="text-secondary small">{{ $task->progress_persen }}%</span>
                             <x-badge-status :status="$task->status->value">{{ $task->status->label() }}</x-badge-status>
                         </div>
                     </div>
-
-                    <div class="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-indigo-500 rounded-full" style="width: {{ $task->progress_persen }}%"></div>
+                    <div class="progress progress-sm mt-2">
+                        <div class="progress-bar bg-primary" style="width: {{ $task->progress_persen }}%"></div>
                     </div>
 
-                    <div class="mt-3 space-y-2">
-                        @forelse($task->dailyScrums as $scrum)
-                        <div class="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2">
-                            <div class="flex items-center justify-between gap-3">
-                                <p class="text-xs font-medium text-gray-600">{{ $scrum->tanggal->format('d M Y') }}</p>
-                                <span class="text-xs text-gray-400">{{ $scrum->pegawai->nama_pegawai }}</span>
+                    @if($task->dailyScrums->count())
+                    <div class="mt-2 d-flex flex-column gap-1">
+                        @foreach($task->dailyScrums as $scrum)
+                        <div class="card card-sm bg-light border-0">
+                            <div class="card-body py-2">
+                                <div class="d-flex justify-content-between">
+                                    <span class="small fw-medium text-secondary">{{ $scrum->tanggal->format('d M Y') }}</span>
+                                    <span class="small text-secondary">{{ $scrum->pegawai->nama_pegawai }}</span>
+                                </div>
+                                <div class="small mt-1">{{ $scrum->rencana_kerja_harian }}</div>
                             </div>
-                            <p class="text-sm text-gray-600 mt-1">{{ $scrum->rencana_kerja_harian }}</p>
                         </div>
-                        @empty
-                        <p class="text-xs text-gray-400">Belum ada daily scrum pada task ini.</p>
-                        @endforelse
+                        @endforeach
                     </div>
+                    @endif
                 </div>
                 @empty
-                <div class="px-5 py-6 text-center text-sm text-gray-400">Tidak ada task</div>
+                <div class="list-group-item text-center text-secondary py-4">Tidak ada task</div>
                 @endforelse
             </div>
         </div>
 
-        <div class="bg-white rounded-xl border border-gray-200">
-            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-                <h3 class="font-medium text-gray-700">Daily Scrum Terbaru</h3>
-                <span class="text-xs text-gray-400">{{ $dailyScrums->count() }} entri</span>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Daily Scrum Terbaru</h3>
+                <div class="card-options">
+                    <span class="text-secondary small">{{ $dailyScrums->count() }} entri</span>
+                </div>
             </div>
-            <div class="divide-y divide-gray-50">
+            <div class="list-group list-group-flush">
                 @forelse($dailyScrums as $scrum)
-                <div class="px-5 py-3">
-                    <div class="flex items-center justify-between gap-3">
-                        <p class="text-sm font-medium text-gray-800">{{ $scrum->task->nama_task }}</p>
-                        <span class="text-xs text-gray-400">{{ $scrum->tanggal->format('d M Y') }}</span>
+                <div class="list-group-item">
+                    <div class="d-flex align-items-center justify-content-between gap-2">
+                        <span class="fw-medium small">{{ $scrum->task->nama_task }}</span>
+                        <span class="text-secondary small">{{ $scrum->tanggal->format('d M Y') }}</span>
                     </div>
-                    <p class="text-xs text-gray-400 mt-1">{{ $scrum->task->kegiatan->programKerja->nama_program }} · {{ $scrum->task->kegiatan->nama_kegiatan }}</p>
-                    <p class="text-sm text-gray-600 mt-2">{{ $scrum->rencana_kerja_harian }}</p>
+                    <div class="text-secondary small">{{ $scrum->task->kegiatan->programKerja->nama_program }} · {{ $scrum->task->kegiatan->nama_kegiatan }}</div>
+                    <div class="mt-1 small">{{ $scrum->rencana_kerja_harian }}</div>
                 </div>
                 @empty
-                <div class="px-5 py-6 text-center text-sm text-gray-400">Belum ada daily scrum</div>
+                <div class="list-group-item text-center text-secondary py-4">Belum ada daily scrum</div>
                 @endforelse
             </div>
         </div>

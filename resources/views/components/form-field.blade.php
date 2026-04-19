@@ -1,14 +1,14 @@
 @props(['label', 'name', 'required' => false])
 
-<div {{ $attributes->only('class') }}>
-    <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 mb-1">
+<div {{ $attributes->only('class') }} class="mb-3">
+    <label for="{{ $name }}" class="form-label">
         {{ $label }}
-        @if($required)<span class="text-red-500">*</span>@endif
+        @if($required)<span class="text-danger">*</span>@endif
     </label>
 
     {{ $slot }}
 
     @error($name)
-    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+    <div class="invalid-feedback d-block">{{ $message }}</div>
     @enderror
 </div>

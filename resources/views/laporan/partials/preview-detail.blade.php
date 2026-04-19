@@ -1,108 +1,168 @@
-<div class="space-y-6">
-    <section class="bg-white rounded-xl border border-gray-200 p-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Identitas Laporan</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mt-4">
-            <div class="rounded-xl border border-gray-200 p-4 bg-gray-50">
-                <p class="text-xs text-gray-500">Nama Pegawai</p>
-                <p class="text-sm font-semibold text-gray-800 mt-1">{{ $selectedPegawai?->nama_pegawai ?? 'Semua Pegawai' }}</p>
-            </div>
-            <div class="rounded-xl border border-gray-200 p-4 bg-gray-50">
-                <p class="text-xs text-gray-500">Jabatan</p>
-                <p class="text-sm font-semibold text-gray-800 mt-1">{{ $selectedPegawai?->jabatan ?? '-' }}</p>
-            </div>
-            <div class="rounded-xl border border-gray-200 p-4 bg-gray-50">
-                <p class="text-xs text-gray-500">Unit Kerja</p>
-                <p class="text-sm font-semibold text-gray-800 mt-1">{{ $selectedPegawai?->unit_kerja ?? '-' }}</p>
-            </div>
-            <div class="rounded-xl border border-gray-200 p-4 bg-gray-50">
-                <p class="text-xs text-gray-500">Periode</p>
-                <p class="text-sm font-semibold text-gray-800 mt-1">{{ $periodeLabel }}</p>
-            </div>
-            <div class="rounded-xl border border-gray-200 p-4 bg-gray-50">
-                <p class="text-xs text-gray-500">Tanggal Lapor</p>
-                <p class="text-sm font-semibold text-gray-800 mt-1">{{ $generatedAt->translatedFormat('d F Y') }}</p>
+<div class="d-flex flex-column gap-3">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary text-uppercase small fw-semibold">Identitas Laporan</h3>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-sm-6 col-xl-auto flex-xl-fill">
+                    <div class="card card-sm bg-light border-0">
+                        <div class="card-body">
+                            <div class="text-secondary small">Nama Pegawai</div>
+                            <div class="fw-semibold">{{ $selectedPegawai?->nama_pegawai ?? 'Semua Pegawai' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-auto flex-xl-fill">
+                    <div class="card card-sm bg-light border-0">
+                        <div class="card-body">
+                            <div class="text-secondary small">Jabatan</div>
+                            <div class="fw-semibold">{{ $selectedPegawai?->jabatan ?? '-' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-auto flex-xl-fill">
+                    <div class="card card-sm bg-light border-0">
+                        <div class="card-body">
+                            <div class="text-secondary small">Unit Kerja</div>
+                            <div class="fw-semibold">{{ $selectedPegawai?->unit_kerja ?? '-' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-auto flex-xl-fill">
+                    <div class="card card-sm bg-light border-0">
+                        <div class="card-body">
+                            <div class="text-secondary small">Periode</div>
+                            <div class="fw-semibold">{{ $periodeLabel }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-auto flex-xl-fill">
+                    <div class="card card-sm bg-light border-0">
+                        <div class="card-body">
+                            <div class="text-secondary small">Tanggal Lapor</div>
+                            <div class="fw-semibold">{{ $generatedAt->translatedFormat('d F Y') }}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="bg-white rounded-xl border border-gray-200 p-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Ringkasan Kinerja Bulanan</p>
-        <div class="grid grid-cols-2 lg:grid-cols-6 gap-4 mt-4">
-            <div class="rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Total Task</p>
-                <p class="text-2xl font-bold text-gray-800 mt-1">{{ $summary['total_task'] }}</p>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary text-uppercase small fw-semibold">Ringkasan Kinerja Bulanan</h3>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 mb-3">
+                <div class="col-6 col-lg-2">
+                    <div class="card card-sm border">
+                        <div class="card-body">
+                            <div class="subheader">Total Task</div>
+                            <div class="h1 mb-0">{{ $summary['total_task'] }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="card card-sm border">
+                        <div class="card-body">
+                            <div class="subheader">Task Selesai</div>
+                            <div class="h1 mb-0 text-success">{{ $summary['task_selesai'] }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="card card-sm border">
+                        <div class="card-body">
+                            <div class="subheader">On Progress</div>
+                            <div class="h1 mb-0 text-warning">{{ $summary['task_on_progress'] }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="card card-sm border">
+                        <div class="card-body">
+                            <div class="subheader">Tidak Selesai</div>
+                            <div class="h1 mb-0 text-danger">{{ $summary['task_tidak_selesai'] }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="card card-sm border">
+                        <div class="card-body">
+                            <div class="subheader">Capaian</div>
+                            <div class="h1 mb-0 text-primary">{{ $summary['persentase_capaian'] }}%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="card card-sm border">
+                        <div class="card-body">
+                            <div class="subheader">Hari Kerja</div>
+                            <div class="h1 mb-0">{{ $summary['total_hari_kerja'] }}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Task Selesai</p>
-                <p class="text-2xl font-bold text-green-600 mt-1">{{ $summary['task_selesai'] }}</p>
-            </div>
-            <div class="rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">On Progress</p>
-                <p class="text-2xl font-bold text-amber-600 mt-1">{{ $summary['task_on_progress'] }}</p>
-            </div>
-            <div class="rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Tidak Selesai</p>
-                <p class="text-2xl font-bold text-rose-600 mt-1">{{ $summary['task_tidak_selesai'] }}</p>
-            </div>
-            <div class="rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Capaian</p>
-                <p class="text-2xl font-bold text-indigo-600 mt-1">{{ $summary['persentase_capaian'] }}%</p>
-            </div>
-            <div class="rounded-xl border border-gray-200 p-4">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Hari Kerja</p>
-                <p class="text-2xl font-bold text-gray-800 mt-1">{{ $summary['total_hari_kerja'] }}</p>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card card-sm bg-light border-0">
+                        <div class="card-body">
+                            <div class="fw-semibold mb-2">WakaTime</div>
+                            <div class="text-secondary small">Total Jam Kerja (Coding): <span class="fw-semibold text-body">{{ number_format($summary['total_jam_kerja'], 1) }} jam</span></div>
+                            <div class="text-secondary small">Rata-rata per hari: <span class="fw-semibold text-body">{{ number_format($summary['rata_rata_jam_kerja'], 1) }} jam</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-sm bg-light border-0">
+                        <div class="card-body">
+                            <div class="fw-semibold mb-2">GitHub</div>
+                            <div class="text-secondary small">Total Commit: <span class="fw-semibold text-body">{{ $summary['total_commit'] }}</span></div>
+                            <div class="text-secondary small">Pull Request: <span class="fw-semibold text-body">{{ $summary['total_pull_request'] }}</span></div>
+                            <div class="text-secondary small">Issue Tercatat: <span class="fw-semibold text-body">{{ $summary['total_issue'] }}</span></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-            <div class="rounded-xl border border-gray-200 p-4 bg-slate-50">
-                <p class="text-sm font-semibold text-gray-800">WakaTime</p>
-                <p class="text-sm text-gray-600 mt-2">Total Jam Kerja (Coding): <span class="font-semibold text-gray-800">{{ number_format($summary['total_jam_kerja'], 1) }} jam</span></p>
-                <p class="text-sm text-gray-600 mt-1">Rata-rata per hari: <span class="font-semibold text-gray-800">{{ number_format($summary['rata_rata_jam_kerja'], 1) }} jam</span></p>
-            </div>
-            <div class="rounded-xl border border-gray-200 p-4 bg-slate-50">
-                <p class="text-sm font-semibold text-gray-800">GitHub</p>
-                <p class="text-sm text-gray-600 mt-2">Total Commit: <span class="font-semibold text-gray-800">{{ $summary['total_commit'] }}</span></p>
-                <p class="text-sm text-gray-600 mt-1">Pull Request: <span class="font-semibold text-gray-800">{{ $summary['total_pull_request'] }}</span></p>
-                <p class="text-sm text-gray-600 mt-1">Issue Tercatat: <span class="font-semibold text-gray-800">{{ $summary['total_issue'] }}</span></p>
-            </div>
-        </div>
-    </section>
-
-    <section class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Rincian Program & Kegiatan</p>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary text-uppercase small fw-semibold">Rincian Program & Kegiatan</h3>
         </div>
 
         @forelse($programReports as $programReport)
-        <div class="px-6 py-5 border-b border-gray-100 last:border-b-0">
-            <div class="flex items-center justify-between gap-3 mb-4">
+        <div class="card-body border-bottom">
+            <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
                 <div>
-                    <p class="text-lg font-semibold text-gray-800">{{ $programReport['program']->nama_program }}</p>
-                    <p class="text-sm text-gray-500">{{ $programReport['program']->status_program->label() }}</p>
+                    <div class="fw-semibold fs-5">{{ $programReport['program']->nama_program }}</div>
+                    <div class="text-secondary small">{{ $programReport['program']->status_program->label() }}</div>
                 </div>
                 <x-badge-status :status="$programReport['program']->status_program->value">{{ $programReport['program']->status_program->label() }}</x-badge-status>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead class="bg-gray-50 border-y border-gray-100">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table table-sm">
+                    <thead>
                         <tr>
-                            <th class="text-left px-4 py-3 font-medium text-gray-600 w-12">No</th>
-                            <th class="text-left px-4 py-3 font-medium text-gray-600">Kegiatan</th>
-                            <th class="text-left px-4 py-3 font-medium text-gray-600">Target</th>
-                            <th class="text-left px-4 py-3 font-medium text-gray-600">Realisasi</th>
-                            <th class="text-left px-4 py-3 font-medium text-gray-600">Status</th>
+                            <th class="w-1">No</th>
+                            <th>Kegiatan</th>
+                            <th>Target</th>
+                            <th>Realisasi</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                    <tbody>
                         @foreach($programReport['kegiatan_rows'] as $row)
                         <tr>
-                            <td class="px-4 py-3 text-gray-500">{{ $loop->iteration }}</td>
-                            <td class="px-4 py-3"><p class="font-medium text-gray-800">{{ $row['kegiatan']->nama_kegiatan }}</p></td>
-                            <td class="px-4 py-3 text-gray-600">{{ $row['target'] }}</td>
-                            <td class="px-4 py-3 text-gray-600">{{ $row['realisasi'] }}</td>
-                            <td class="px-4 py-3 text-gray-600">{{ $row['status'] }}</td>
+                            <td class="text-secondary">{{ $loop->iteration }}</td>
+                            <td class="fw-medium">{{ $row['kegiatan']->nama_kegiatan }}</td>
+                            <td class="text-secondary">{{ $row['target'] }}</td>
+                            <td class="text-secondary">{{ $row['realisasi'] }}</td>
+                            <td class="text-secondary">{{ $row['status'] }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -110,186 +170,201 @@
             </div>
         </div>
         @empty
-        <div class="px-6 py-12 text-center text-sm text-gray-400">Tidak ada data program dan kegiatan pada periode ini.</div>
+        <div class="card-body text-center text-secondary py-5">Tidak ada data program dan kegiatan pada periode ini.</div>
         @endforelse
-    </section>
+    </div>
 
-    <section class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Rincian Task</p>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary text-uppercase small fw-semibold">Rincian Task</h3>
         </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b border-gray-100">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
                     <tr>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600 w-12">No</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Task</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Kegiatan</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Assigned</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Progress</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Due Date</th>
+                        <th class="w-1">No</th>
+                        <th>Task</th>
+                        <th>Kegiatan</th>
+                        <th>Assigned</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        <th>Due Date</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+                <tbody>
                     @forelse($tasks as $task)
                     <tr>
-                        <td class="px-4 py-3 text-gray-500">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-3">
-                            <p class="font-medium text-gray-800">{{ $task->nama_task }}</p>
+                        <td class="text-secondary">{{ $loop->iteration }}</td>
+                        <td>
+                            <div class="fw-medium">{{ $task->nama_task }}</div>
                             @if($task->deskripsi_task)
-                            <p class="text-xs text-gray-500 mt-1">{{ \Illuminate\Support\Str::of($task->deskripsi_task)->squish()->limit(90) }}</p>
+                            <div class="text-secondary small">{{ \Illuminate\Support\Str::of($task->deskripsi_task)->squish()->limit(90) }}</div>
                             @endif
                         </td>
-                        <td class="px-4 py-3 text-gray-600">
-                            <p>{{ $task->kegiatan->nama_kegiatan }}</p>
-                            <p class="text-xs text-gray-400">{{ $task->kegiatan->programKerja->nama_program }}</p>
+                        <td>
+                            <div>{{ $task->kegiatan->nama_kegiatan }}</div>
+                            <div class="text-secondary small">{{ $task->kegiatan->programKerja->nama_program }}</div>
                         </td>
-                        <td class="px-4 py-3 text-gray-600">{{ $task->assignee?->nama_pegawai ?? '-' }}</td>
-                        <td class="px-4 py-3"><x-badge-status :status="$task->status->value">{{ $task->status->label() }}</x-badge-status></td>
-                        <td class="px-4 py-3 text-gray-600">{{ $task->progress_persen }}%</td>
-                        <td class="px-4 py-3 text-gray-600 whitespace-nowrap">{{ $task->due_date?->translatedFormat('d M Y') ?? '-' }}</td>
+                        <td class="text-secondary">{{ $task->assignee?->nama_pegawai ?? '-' }}</td>
+                        <td><x-badge-status :status="$task->status->value">{{ $task->status->label() }}</x-badge-status></td>
+                        <td class="text-secondary">{{ $task->progress_persen }}%</td>
+                        <td class="text-secondary">{{ $task->due_date?->translatedFormat('d M Y') ?? '-' }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="7" class="px-4 py-12 text-center text-sm text-gray-400">Tidak ada task pada periode ini.</td></tr>
+                    <tr><td colspan="7" class="text-center text-secondary py-5">Tidak ada task pada periode ini.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-    </section>
+    </div>
 
-    <section class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Ringkasan Aktivitas Harian</p>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary text-uppercase small fw-semibold">Ringkasan Aktivitas Harian</h3>
         </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b border-gray-100">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
                     <tr>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Tanggal</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Task</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Rencana</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Realisasi</th>
-                        <th class="text-left px-4 py-3 font-medium text-gray-600">Kendala</th>
+                        <th>Tanggal</th>
+                        <th>Task</th>
+                        <th>Rencana</th>
+                        <th>Realisasi</th>
+                        <th>Kendala</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+                <tbody>
                     @forelse($scrums as $scrum)
                     <tr>
-                        <td class="px-4 py-3 text-gray-600 whitespace-nowrap">{{ $scrum->tanggal->translatedFormat('d M Y') }}</td>
-                        <td class="px-4 py-3 text-gray-600">
-                            <p class="font-medium text-gray-800">{{ $scrum->task->nama_task }}</p>
-                            <p class="text-xs text-gray-400">{{ $scrum->pegawai->nama_pegawai }}</p>
+                        <td class="text-secondary">{{ $scrum->tanggal->translatedFormat('d M Y') }}</td>
+                        <td>
+                            <div class="fw-medium">{{ $scrum->task->nama_task }}</div>
+                            <div class="text-secondary small">{{ $scrum->pegawai->nama_pegawai }}</div>
                         </td>
-                        <td class="px-4 py-3 text-gray-600">{{ $scrum->rencana_kerja_harian }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ $scrum->realisasi ?: '-' }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ $scrum->potensi_risiko ?: '-' }}</td>
+                        <td class="text-secondary">{{ $scrum->rencana_kerja_harian }}</td>
+                        <td class="text-secondary">{{ $scrum->realisasi ?: '-' }}</td>
+                        <td class="text-secondary">{{ $scrum->potensi_risiko ?: '-' }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="px-4 py-12 text-center text-sm text-gray-400">Tidak ada daily scrum pada periode ini.</td></tr>
+                    <tr><td colspan="5" class="text-center text-secondary py-5">Tidak ada daily scrum pada periode ini.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-    </section>
+    </div>
 
-    <section class="bg-white rounded-xl border border-gray-200 p-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Bukti Pencapaian</p>
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mt-4">
-            <div class="rounded-xl border border-gray-200 p-4">
-                <p class="text-sm font-semibold text-gray-800">Dokumen / Output</p>
-                <div class="mt-3 space-y-3 text-sm text-gray-600">
-                    @forelse($evidence['bukti_aktivitas']->take(5) as $bukti)
-                    <div class="border border-gray-100 rounded-lg p-3">
-                        <p class="font-medium text-gray-800">{{ $bukti->jenis_bukti->label() }}</p>
-                        <p class="mt-1 break-all">{{ $bukti->sumber_bukti }}</p>
-                        @if($bukti->keterangan)
-                        <p class="mt-1 text-xs text-gray-500">{{ $bukti->keterangan }}</p>
-                        @endif
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary text-uppercase small fw-semibold">Bukti Pencapaian</h3>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-xl-4">
+                    <div class="fw-semibold mb-2">Dokumen / Output</div>
+                    <div class="d-flex flex-column gap-2">
+                        @forelse($evidence['bukti_aktivitas']->take(5) as $bukti)
+                        <div class="card card-sm border">
+                            <div class="card-body">
+                                <div class="fw-medium">{{ $bukti->jenis_bukti->label() }}</div>
+                                <div class="text-secondary small text-break mt-1">{{ $bukti->sumber_bukti }}</div>
+                                @if($bukti->keterangan)
+                                <div class="text-secondary small mt-1">{{ $bukti->keterangan }}</div>
+                                @endif
+                            </div>
+                        </div>
+                        @empty
+                        <div class="text-secondary small">Belum ada bukti aktivitas pada periode ini.</div>
+                        @endforelse
                     </div>
-                    @empty
-                    <p class="text-gray-400">Belum ada bukti aktivitas pada periode ini.</p>
-                    @endforelse
                 </div>
-            </div>
-
-            <div class="rounded-xl border border-gray-200 p-4">
-                <p class="text-sm font-semibold text-gray-800">GitHub</p>
-                <div class="mt-3 space-y-2 text-sm text-gray-600">
-                    <p>Repo: <span class="font-medium text-gray-800">{{ $evidence['repos']->isNotEmpty() ? $evidence['repos']->join(', ') : '-' }}</span></p>
-                    <p>PR Tercatat: <span class="font-medium text-gray-800">{{ $summary['total_pull_request'] }}</span></p>
-                    <p>Commit Penting:</p>
-                    <div class="space-y-2">
+                <div class="col-xl-4">
+                    <div class="fw-semibold mb-2">GitHub</div>
+                    <div class="text-secondary small mb-2">Repo: <span class="fw-medium text-body">{{ $evidence['repos']->isNotEmpty() ? $evidence['repos']->join(', ') : '-' }}</span></div>
+                    <div class="text-secondary small mb-2">PR Tercatat: <span class="fw-medium text-body">{{ $summary['total_pull_request'] }}</span></div>
+                    <div class="fw-medium small mb-2">Commit Penting:</div>
+                    <div class="d-flex flex-column gap-2">
                         @forelse($evidence['github_activities']->take(5) as $activity)
-                        <div class="border border-gray-100 rounded-lg p-3">
-                            <p class="font-medium text-gray-800">{{ $activity->repo_name }}</p>
-                            <p class="text-xs text-gray-500 mt-1">{{ $activity->commit_hash ? substr($activity->commit_hash, 0, 7) : 'commit' }} · {{ $activity->commit_time?->translatedFormat('d M Y H:i') ?? '-' }}</p>
-                            <p class="mt-1">{{ $activity->commit_message ?: ($activity->pr_link ?: '-') }}</p>
+                        <div class="card card-sm border">
+                            <div class="card-body">
+                                <div class="fw-medium">{{ $activity->repo_name }}</div>
+                                <div class="text-secondary small mt-1">{{ $activity->commit_hash ? substr($activity->commit_hash, 0, 7) : 'commit' }} · {{ $activity->commit_time?->translatedFormat('d M Y H:i') ?? '-' }}</div>
+                                <div class="small mt-1">{{ $activity->commit_message ?: ($activity->pr_link ?: '-') }}</div>
+                            </div>
                         </div>
                         @empty
-                        <p class="text-gray-400">Tidak ada aktivitas GitHub pada periode ini.</p>
+                        <div class="text-secondary small">Tidak ada aktivitas GitHub pada periode ini.</div>
                         @endforelse
                     </div>
                 </div>
-            </div>
-
-            <div class="rounded-xl border border-gray-200 p-4">
-                <p class="text-sm font-semibold text-gray-800">WakaTime</p>
-                <div class="mt-3 space-y-2 text-sm text-gray-600">
-                    <p>Total durasi kerja: <span class="font-medium text-gray-800">{{ number_format($summary['total_jam_kerja'], 1) }} jam</span></p>
-                    <p>Project yang dikerjakan:</p>
-                    <div class="space-y-2">
+                <div class="col-xl-4">
+                    <div class="fw-semibold mb-2">WakaTime</div>
+                    <div class="text-secondary small mb-3">Total durasi kerja: <span class="fw-medium text-body">{{ number_format($summary['total_jam_kerja'], 1) }} jam</span></div>
+                    <div class="fw-medium small mb-2">Project yang dikerjakan:</div>
+                    <div class="d-flex flex-column gap-1">
                         @forelse($evidence['project_durations'] as $project => $duration)
-                        <div class="flex items-center justify-between gap-3 border border-gray-100 rounded-lg px-3 py-2">
-                            <span class="text-gray-700">{{ $project }}</span>
-                            <span class="font-medium text-gray-800">{{ number_format($duration, 1) }} jam</span>
+                        <div class="d-flex justify-content-between align-items-center border rounded px-3 py-2">
+                            <span class="small">{{ $project }}</span>
+                            <span class="fw-medium small">{{ number_format($duration, 1) }} jam</span>
                         </div>
                         @empty
-                        <p class="text-gray-400">Tidak ada data WakaTime pada periode ini.</p>
+                        <div class="text-secondary small">Tidak ada data WakaTime pada periode ini.</div>
                         @endforelse
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="bg-white rounded-xl border border-gray-200 p-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Analisis Capaian</p>
-        <div class="mt-4 space-y-3 text-sm text-gray-700">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary text-uppercase small fw-semibold">Analisis Capaian</h3>
+        </div>
+        <div class="card-body">
             @foreach($analysis as $item)
-            <p>{{ $item }}</p>
+            <p class="text-secondary mb-2">{{ $item }}</p>
             @endforeach
         </div>
-    </section>
+    </div>
 
-    <section class="bg-white rounded-xl border border-gray-200 p-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Kendala dan Permasalahan</p>
-        <div class="mt-4 space-y-2">
-            @foreach($obstacles as $item)
-            <div class="flex items-start gap-3 text-sm text-gray-700">
-                <span class="mt-1.5 size-2 rounded-full bg-rose-400 shrink-0"></span>
-                <p>{{ $item }}</p>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h3 class="card-title text-primary text-uppercase small fw-semibold">Kendala dan Permasalahan</h3>
+                </div>
+                <div class="card-body">
+                    @foreach($obstacles as $item)
+                    <div class="d-flex align-items-start gap-2 mb-2">
+                        <span class="badge bg-danger mt-1 p-1"></span>
+                        <span class="text-secondary small">{{ $item }}</span>
+                    </div>
+                    @endforeach
+                </div>
             </div>
-            @endforeach
         </div>
-    </section>
-
-    <section class="bg-white rounded-xl border border-gray-200 p-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Rencana Tindak Lanjut</p>
-        <div class="mt-4 space-y-2">
-            @foreach($followUps as $item)
-            <div class="flex items-start gap-3 text-sm text-gray-700">
-                <span class="mt-1.5 size-2 rounded-full bg-emerald-400 shrink-0"></span>
-                <p>{{ $item }}</p>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h3 class="card-title text-primary text-uppercase small fw-semibold">Rencana Tindak Lanjut</h3>
+                </div>
+                <div class="card-body">
+                    @foreach($followUps as $item)
+                    <div class="d-flex align-items-start gap-2 mb-2">
+                        <span class="badge bg-success mt-1 p-1"></span>
+                        <span class="text-secondary small">{{ $item }}</span>
+                    </div>
+                    @endforeach
+                </div>
             </div>
-            @endforeach
         </div>
-    </section>
+    </div>
 
-    <section class="bg-white rounded-xl border border-gray-200 p-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">Kesimpulan</p>
-        <p class="mt-4 text-sm leading-7 text-gray-700">{{ $conclusion }}</p>
-    </section>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-primary text-uppercase small fw-semibold">Kesimpulan</h3>
+        </div>
+        <div class="card-body">
+            <p class="text-secondary mb-0" style="line-height: 1.8">{{ $conclusion }}</p>
+        </div>
+    </div>
 </div>
