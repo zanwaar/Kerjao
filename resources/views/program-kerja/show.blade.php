@@ -35,12 +35,58 @@
         </div>
         <div class="divide-y divide-gray-50">
             @forelse($programKerja->kegiatan as $kegiatan)
-            <div class="px-5 py-3 flex items-center justify-between gap-3">
-                <div>
-                    <a href="{{ route('kegiatan.show', $kegiatan) }}" class="text-sm font-medium text-gray-800 hover:text-indigo-600">{{ $kegiatan->nama_kegiatan }}</a>
-                    <p class="text-xs text-gray-400 mt-0.5">{{ $kegiatan->waktu_mulai->format('d M') }} — {{ $kegiatan->waktu_selesai->format('d M Y') }} · {{ $kegiatan->tasks_count }} task</p>
+            <div class="px-5 py-4">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <a href="{{ route('kegiatan.show', $kegiatan) }}" class="text-sm font-medium text-gray-800 hover:text-indigo-600">{{ $kegiatan->nama_kegiatan }}</a>
+                        <p class="text-xs text-gray-400 mt-0.5">
+                            {{ $kegiatan->waktu_mulai->format('d M') }} — {{ $kegiatan->waktu_selesai->format('d M Y') }}
+                            · {{ $kegiatan->task_done_count }}/{{ $kegiatan->tasks_count }} task selesai
+                        </p>
+                    </div>
+                    <x-badge-status :status="$kegiatan->status_kegiatan->value">{{ $kegiatan->status_kegiatan->label() }}</x-badge-status>
                 </div>
-                <x-badge-status :status="$kegiatan->status_kegiatan->value">{{ $kegiatan->status_kegiatan->label() }}</x-badge-status>
+
+                @if(auth()->user()->can('task.view-all'))
+                <div class="mt-4 space-y-3">
+                    @forelse($kegiatan->tasks as $task)
+                    <div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <a href="{{ route('task.show', $task) }}" class="text-sm font-medium text-gray-800 hover:text-indigo-600">{{ $task->nama_task }}</a>
+                                <p class="text-xs text-gray-400 mt-1">{{ $task->assignee?->nama_pegawai ?? 'Belum diassign' }} · Progress {{ $task->progress_persen }}%</p>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <span class="text-xs text-gray-500">{{ $task->daily_scrums_count }} scrum</span>
+                                <x-badge-status :status="$task->status->value">{{ $task->status->label() }}</x-badge-status>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 h-1.5 bg-white rounded-full overflow-hidden">
+                            <div class="h-full bg-indigo-500 rounded-full" style="width: {{ $task->progress_persen }}%"></div>
+                        </div>
+
+                        <div class="mt-3 space-y-2">
+                            @forelse($task->dailyScrums as $scrum)
+                            <div class="rounded-lg border border-gray-200 bg-white px-3 py-2">
+                                <div class="flex items-center justify-between gap-3">
+                                    <p class="text-xs font-medium text-gray-600">{{ $scrum->pegawai->nama_pegawai }}</p>
+                                    <span class="text-xs text-gray-400">{{ $scrum->tanggal->format('d M Y') }}</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">{{ $scrum->rencana_kerja_harian }}</p>
+                            </div>
+                            @empty
+                            <p class="text-xs text-gray-400">Belum ada daily scrum pada task ini.</p>
+                            @endforelse
+                        </div>
+                    </div>
+                    @empty
+                    <div class="rounded-xl border border-dashed border-gray-200 px-4 py-6 text-center text-sm text-gray-400">
+                        Belum ada task pada kegiatan ini.
+                    </div>
+                    @endforelse
+                </div>
+                @endif
             </div>
             @empty
             <div class="px-5 py-8 text-center text-sm text-gray-400">Belum ada kegiatan</div>

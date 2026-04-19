@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\StatusTask;
+use App\Models\DailyScrum;
 use App\Models\Kegiatan;
 use App\Models\Pegawai;
 use App\Models\ProgramKerja;
@@ -364,4 +365,164 @@ test('pegawai can filter task saya by program kerja', function () {
         ->assertSee('Program A')
         ->assertSee($taskA->nama_task)
         ->assertDontSee($taskB->nama_task);
+});
+
+test('admin sidebar is simplified for monitoring flow', function () {
+    $adminUser = User::factory()->create();
+    $adminUser->assignRole('admin');
+
+    $this->actingAs($adminUser);
+
+    $this->get(route('dashboard'))
+        ->assertSuccessful()
+        ->assertSee('<a href="'.route('program-kerja.index').'"', false)
+        ->assertSee('<a href="'.route('pegawai.index').'"', false)
+        ->assertSee('<a href="'.route('laporan.index').'"', false)
+        ->assertDontSee('<a href="'.route('kegiatan.index').'"', false)
+        ->assertDontSee('<a href="'.route('task.index').'"', false)
+        ->assertDontSee('<a href="'.route('daily-scrum.index').'"', false);
+});
+
+test('admin can monitor task and daily scrum from program detail page', function () {
+    $adminUser = User::factory()->create();
+    $adminUser->assignRole('admin');
+
+    $pegawaiUser = User::factory()->create();
+    $pegawaiUser->assignRole('pegawai');
+    $pegawai = Pegawai::factory()->create([
+        'user_id' => $pegawaiUser->id,
+        'nama_pegawai' => 'Rina Monitoring',
+    ]);
+
+    $program = ProgramKerja::factory()->create([
+        'nama_program' => 'Program Monitoring Admin',
+        'created_by' => $adminUser->id,
+    ]);
+
+    $kegiatan = Kegiatan::factory()->create([
+        'program_kerja_id' => $program->id,
+        'nama_kegiatan' => 'Kegiatan Monitoring Admin',
+        'created_by' => $adminUser->id,
+    ]);
+
+    $task = TodoList::factory()->create([
+        'kegiatan_id' => $kegiatan->id,
+        'assigned_to' => $pegawai->id,
+        'created_by' => $adminUser->id,
+        'nama_task' => 'Task Monitoring Admin',
+        'progress_persen' => 65,
+        'status' => StatusTask::OnProgress,
+    ]);
+
+    DailyScrum::factory()->create([
+        'task_id' => $task->id,
+        'pegawai_id' => $pegawai->id,
+        'tanggal' => now()->toDateString(),
+        'rencana_kerja_harian' => 'Melanjutkan integrasi monitoring program.',
+    ]);
+
+    $this->actingAs($adminUser);
+
+    $this->get(route('program-kerja.show', $program))
+        ->assertSuccessful()
+        ->assertSee($kegiatan->nama_kegiatan)
+        ->assertSee($task->nama_task)
+        ->assertSee('Rina Monitoring')
+        ->assertSee('Melanjutkan integrasi monitoring program.');
+});
+
+test('admin can view pegawai page with related program task and daily scrum', function () {
+    $adminUser = User::factory()->create();
+    $adminUser->assignRole('admin');
+
+    $pegawaiUser = User::factory()->create();
+    $pegawaiUser->assignRole('pegawai');
+    $pegawai = Pegawai::factory()->create([
+        'user_id' => $pegawaiUser->id,
+        'nama_pegawai' => 'Sinta Aktivitas',
+    ]);
+
+    $program = ProgramKerja::factory()->create([
+        'nama_program' => 'Program Pegawai Sinta',
+        'created_by' => $adminUser->id,
+    ]);
+
+    $kegiatan = Kegiatan::factory()->create([
+        'program_kerja_id' => $program->id,
+        'nama_kegiatan' => 'Kegiatan Sinta',
+        'created_by' => $adminUser->id,
+    ]);
+
+    $task = TodoList::factory()->create([
+        'kegiatan_id' => $kegiatan->id,
+        'assigned_to' => $pegawai->id,
+        'created_by' => $adminUser->id,
+        'nama_task' => 'Task Sinta',
+        'progress_persen' => 55,
+    ]);
+
+    DailyScrum::factory()->create([
+        'task_id' => $task->id,
+        'pegawai_id' => $pegawai->id,
+        'tanggal' => now()->toDateString(),
+        'rencana_kerja_harian' => 'Menyelesaikan modul pelaporan harian.',
+    ]);
+
+    $this->actingAs($adminUser);
+
+    $this->get(route('pegawai.show', $pegawai))
+        ->assertSuccessful()
+        ->assertSee('Program Pegawai Sinta')
+        ->assertSee('Task Sinta')
+        ->assertSee('Menyelesaikan modul pelaporan harian.');
+});
+
+test('admin dashboard can filter and show program task and daily scrum for selected pegawai', function () {
+    $adminUser = User::factory()->create();
+    $adminUser->assignRole('admin');
+
+    $pegawaiUser = User::factory()->create();
+    $pegawaiUser->assignRole('pegawai');
+    $pegawai = Pegawai::factory()->create([
+        'user_id' => $pegawaiUser->id,
+        'nama_pegawai' => 'Dina Dashboard',
+    ]);
+
+    $program = ProgramKerja::factory()->create([
+        'nama_program' => 'Program Dashboard Dina',
+        'created_by' => $adminUser->id,
+    ]);
+
+    $kegiatan = Kegiatan::factory()->create([
+        'program_kerja_id' => $program->id,
+        'nama_kegiatan' => 'Kegiatan Dashboard Dina',
+        'created_by' => $adminUser->id,
+    ]);
+
+    $task = TodoList::factory()->create([
+        'kegiatan_id' => $kegiatan->id,
+        'assigned_to' => $pegawai->id,
+        'created_by' => $adminUser->id,
+        'nama_task' => 'Task Dashboard Dina',
+        'progress_persen' => 70,
+    ]);
+
+    DailyScrum::factory()->create([
+        'task_id' => $task->id,
+        'pegawai_id' => $pegawai->id,
+        'tanggal' => now()->toDateString(),
+        'rencana_kerja_harian' => 'Menyiapkan monitoring dashboard pegawai.',
+    ]);
+
+    $this->actingAs($adminUser);
+
+    $this->get(route('dashboard', ['pegawai_id' => $pegawai->id]))
+        ->assertSuccessful()
+        ->assertDontSee('Pantau Pegawai')
+        ->assertSee(route('dashboard', ['pegawai_id' => $pegawai->id]), false)
+        ->assertSee('Klik baris pegawai untuk membuka detail program, task, dan daily scrum.')
+        ->assertSee('Dina Dashboard')
+        ->assertSee('Program Dashboard Dina')
+        ->assertSee('Task Dashboard Dina')
+        ->assertSee('Menyiapkan monitoring dashboard pegawai.');
 });

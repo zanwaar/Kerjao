@@ -65,7 +65,26 @@ class ProgramKerjaController extends Controller
             'creator',
             'kegiatan' => fn ($query) => $query
                 ->visibleTo($user)
-                ->withCount(['tasks as tasks_count' => fn ($taskQuery) => $taskQuery->visibleTo($user)]),
+                ->withCount([
+                    'tasks as tasks_count' => fn ($taskQuery) => $taskQuery->visibleTo($user),
+                    'tasks as task_done_count' => fn ($taskQuery) => $taskQuery
+                        ->visibleTo($user)
+                        ->where('status', 'done'),
+                ])
+                ->with([
+                    'tasks' => fn ($taskQuery) => $taskQuery
+                        ->visibleTo($user)
+                        ->withCount('dailyScrums')
+                        ->with([
+                            'assignee',
+                            'dailyScrums' => fn ($scrumQuery) => $scrumQuery
+                                ->with('pegawai')
+                                ->latest('tanggal')
+                                ->latest('id')
+                                ->take(3),
+                        ])
+                        ->latest(),
+                ]),
         ]);
 
         return view('program-kerja.show', compact('programKerja'));
